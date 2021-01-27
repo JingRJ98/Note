@@ -393,3 +393,256 @@ div的父元素是body，body的父元素是html，html的包含块是视窗大�
 </body>
 </html>
 ```
+# stickyfooter 粘连布局
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Document</title>
+    <style>
+        /* 
+            要求
+            1、main的内容足够长时，footer跟着main
+            2、main的长度达不到页面高度时，footer保持在页面底部
+        */
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body{
+            height: 100%;
+        }
+        .container{
+            /* 
+                实际上.container容器不能定死高度，否则footer永远位于页面底部
+                .container的最小高度为100%（继承自html下的body）
+                当.main的内容足够长时，.container的高度被其中的.main撑开
+            */
+            min-height: 100%;
+        }
+        /* 设置footer样式 */
+        .footer{
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            background-color: silver;
+            /* 负margin将footer移动上来 */
+            margin-top: -60px;
+        }
+        /* 
+            此时还有个问题，当main中内容足够多时，底部会和footer重叠
+            应该给.main设置padding-bottom
+            为什么不给.container加padding
+            因为加后会发生.container加高60px，footer挤到下面
+        */
+        .main{
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main">
+            main<br>
+            main<br>
+            main<br>
+            main<br>
+            main<br>         
+        </div>
+    </div>
+    <div class="footer">
+        footer
+    </div>
+</body>
+</html>
+```
+# BFC
+## box
+box是CSS布局的基本对象和单位,一个页面由许多box组成  
+display属性决定了box的类型，不同类型的box，会参与不同的formatting context(一个决定如何绚烂文档的容器)
+
+block-levelbox  
+display属性为table/block/list-item的元素，会生成block-level box参与box formatting context（BFC）
+
+inline-level box  
+display属性为inline/inline-block/inline-table 的元素，会生成inline-level box ，参与inline formatting context
+## 定义
+BFC(Block formatting context)直译为“块级格式化上下文”。它是一个独立的渲染区域，只有Block-level box参与，它规定了内部的Block-level box如何布局，并且与这个区域外部毫不相干
+## 布局规则
+1.内部的Box会在垂直方向，一个接一个放置  
+2.BFC的区域不会与float box重叠 （两列布局）   
+3.内部的box垂直方向的距离由margin决定，属于同一个BFC的两个相邻box的margin会发生重叠 （兄弟元素margin重叠问题）    
+4.计算BFC的高度时，浮动元素也参与计算（清除浮动 haslayout）  
+5.BFC就是页面上的一个隔离的独立容器，容器里面的元素不会影响到外面的元素，反之也如此。  
+## BFC什么时候出现
+1.根元素  
+2.float属性不为none  
+3.position为absolute或fixed    
+4.overflow不为visible    
+5.display为inline-block,table-cell,table-caption,flex,inline-flex
+## 两列布局
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            min-width: 600px;
+        }
+        .left{
+            width: 200px;
+            height: 200px;
+            background-color: #bfa;
+            float: left;
+        }
+        .right{
+            height: 200px;
+            background-color: #abf;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="left">left</div>
+    <div class="right">right</div>
+</body>
+</html>
+```
+# 兄弟元素margin重叠问题
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        /* 
+            发生，margin重叠的三个条件
+                1、属于同一个BFC
+                2、两个相邻的box
+                3、块级元素
+            margin重叠的三个条件只要有一个不满足就不会发生重叠
+        */
+        .box1,
+        .box2,
+        .box4,
+        .box5,
+        .box6,
+        .box7{
+            width: 200px;
+            height: 200px;
+            background-color: #abf;
+            margin: 100px;
+        }
+        /* 
+            不满足条件1
+            box2放到另一个开启BFC的容器中
+        */
+        .box3{
+            overflow: hidden;
+        }
+        /* 
+            不满足条件2
+            在box4和box5中间加一个有高度的div
+            不建议，因为height发生变化了
+        */
+        .box{
+            height: 1px;
+        }
+        /* 
+            不满足条件3
+            将其中一个box(box6)设置为inline-block
+            不满足块元素
+        */
+        .box6{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">1</div>
+    <div class="box3">
+        <div class="box2">2</div>
+    </div>
+
+    <div class="box4">4</div>
+    <div class="box"></div>
+    <div class="box5">5</div>
+
+    <div class="box6">6</div>
+    <div class="box7">7</div>
+</body>
+</html>
+```
+# 父子元素的margin传递问题
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        /* 
+                BFC什么时候出现
+                    1.根元素  
+                    2.float属性不为none  
+                    3.position为absolute或fixed    
+                    4.overflow不为visible    
+                    5.display为inline-block,table-cell,table-caption,flex,inline-flex
+        */
+        .box1 {
+            width: 300px;
+            height: 300px;
+            background-color: #abf;
+        }
+
+        .box2 {
+            width: 100px;
+            height: 100px;
+            background-color: #bfa;
+            margin: 50px;
+        }
+
+        /* 
+            发生margin重叠的三个条件
+                1、属于同一个BFC
+                2、两个相邻的box
+                3、块级元素
+            margin重叠的三个条件只要有一个不满足就不会发生重叠
+        */
+        /* 
+            解决方法
+                1、套一个div
+                2、添加border隔开
+                3、设置行内块
+        */
+        /* 1 */
+        .box {
+            /* 开启BFC第四条 */
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box1">
+        <div class="box">
+            <div class="box2"></div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+```
