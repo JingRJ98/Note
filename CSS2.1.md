@@ -646,3 +646,278 @@ BFC(Block formatting context)直译为“块级格式化上下文”。它是一
 
 </html>
 ```
+# 子元素浮动父元素塌陷问题
+```
+       /* 
+            清除浮动
+                1、直接加高度（扩展性不好）
+                2、开启BFC（IE6/7不支持）
+                    1.根元素  
+                    2.float属性不为none  
+                    3.position为absolute或fixed    
+                    4.overflow不为visible    
+                    5.display为inline-block,table-cell,table-caption,flex,inline-flex
+                    浮动盒子和定位盒子宽高都由内容决定
+                3、br标签清浮动（IE6不支持）
+                4、空标签清浮动（违反结构行为样式相分离的原则）
+                5、伪元素（推荐 但是要加haslayout）
+        */
+```
+### 方式1
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>清除浮动方式一</title>
+    <style>
+        .box1{
+            border: 2px red solid;
+            /* 直接加高度 */
+            height: 200px;
+        }
+        .box2{
+            width: 200px;
+            height: 200px;
+            background-color: silver;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <div class="box2"></div>
+    </div>
+</body>
+</html>
+```
+### 方式2
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>清除浮动方式二</title>
+    <style>
+        .box1{
+            border: 2px red solid;
+            /* 开启BFC */
+            /* overflow: hidden; */
+            /* position: absolute; */
+            /* float: left; */
+            display: inline-block;
+        }
+        .box2{
+            width: 200px;
+            height: 200px;
+            background-color: silver;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <div class="box2"></div>
+    </div>
+</body>
+</html>
+```
+### 方式3
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>清除浮动方式三</title>
+    <style>
+        .box1{
+            border: 2px red solid;
+        }
+        .box2{
+            width: 200px;
+            height: 200px;
+            background-color: silver;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <div class="box2"></div>
+        <!-- br标签 -->
+        <br clear="both">
+    </div>
+</body>
+</html>
+```
+### 方式4
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>清除浮动方式三</title>
+    <style>
+        .box1{
+            border: 2px red solid;
+        }
+        .box2{
+            width: 200px;
+            height: 200px;
+            background-color: silver;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <div class="box2"></div>
+        <!-- 空标签 -->
+        <div style="clear: both;"></div>
+    </div>
+</body>
+</html>
+```
+### 方式5
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>清除浮动方式三</title>
+    <style>
+        .box1{
+            border: 2px red solid;
+        }
+        .box2{
+            width: 200px;
+            height: 200px;
+            background-color: silver;
+            float: left;
+        }
+        /* 伪元素 */
+        .box1::after{
+            content: '';
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1">
+        <div class="box2"></div>
+    </div>
+</body>
+</html>
+```
+# haslayout
+## 定义
+haslayout是windows IE的一个私有概念，它决定元素如何对其内容定位和尺寸计算，以及与其他元素的关系和相互作用 当一个元素“拥有布局”时，它会负责本身及其子元素的尺寸和定位 当一个元素“没有拥有布局”时，它的尺寸和位置由最近的“拥有布局”的祖先元素控制 必须说明的是，IE8及以上的浏览器使用了全新的显示引擎，已经不存在haslayout属性，因此haslayout属性只针对IE6，IE7
+## 默认拥有布局的元素
+html  body  table  tr  td  img  hr  input  select  textarea  button  iframe  embed  object  applet  marquee
+## haslayout开启方式
+float:left/right  
+display:inline-block  
+position:absolute   
+width/height:除auto外   
+zoom:除normal外  
+writing-moder:tb-rl
+
+在IE7中，以下属性也可以开启haslayout  
+min-heght/min-width:任意值   
+max-height/max-width:除none外任意值   
+overflow/overflow-x/overflow-y:除visible外任意值  
+position:fixed
+# IE CSS hack
+## 类内属性前缀法
+```
+类内属性前缀法
+background-color:red; /* All browsers */
+background-color:blue !important;/* All browsers but IE6 */
+*background-color:black; /* IE6, IE7 */
++background-color:yellow;/* IE6, IE7*/
+background-color:gray\9; /* IE6, IE7, IE8, IE9, IE10 */
+background-color:purple\0; /* IE8, IE9, IE10 */
+background-color:orange\9\0;/*IE9, IE10*/
+_background-color:green; /* Only works in IE6 */
+
+等等
+```
+# 元素垂直水平居中
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>已知高宽实现垂直水平居中</title>
+    <style>
+        /*
+            绝对定位盒子的特性
+            水平方向上：
+                left + right + width + padding + margin = 包含块内容区的尺寸
+            垂直方向：
+                top + bottom + height + padding + margin = 包含块内容区的尺寸
+         */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html , body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        #test {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 200px;
+            height: 200px;
+            background-color: #2ab975;
+        }
+    </style>
+</head>
+<body>
+    <div id="test"></div>
+</body>
+</html>
+```
+# 图片垂直居中
+CSS 的属性 vertical-align 用来指定行内元素（inline）或表格单元格（table-cell）元素的垂直对齐方式。  
+注意 vertical-align 只对行内元素、表格单元格元素生效：不能用它垂直对齐块级元素。
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片垂直水平居中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html , body {
+            height: 100%;
+            text-align: center;
+        }
+        body:after {
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+        img {
+            width: 200px;
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+<body>
+    <img src="../img/01.jpg" alt="">
+</body>
+</html>
+```
