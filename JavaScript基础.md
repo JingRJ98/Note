@@ -130,6 +130,12 @@ Undefined（未定义）类型的值只有一个，就undefind
     </script>
 ```
 对于Number和Boolean实际上就是调用toString()方法 但是对于null和undefined，不会调用toString()方法 它会将null直接转换为"null" 将number直接转换为"number"
+
+方式三  
+隐式的类型转换，浏览器自动完成，实际上也调用String()函数
+```
+c = c + '';
+```
 ## 5.2 转换成number
 方式一  
 使用Number()函数
@@ -181,6 +187,8 @@ parseFloat函数转换成浮点数
 ```
  使用parse函数可以指定第二个参数表示进制parseInt(b,10);
  ## 5.3 转换成Boolean
+ 方式一  
+ 
  使用Boolean()函数  
  除了null和NaN，其余都输出true    
  字符串除了空，都输出true  
@@ -194,14 +202,84 @@ parseFloat函数转换成浮点数
         console.log(typeof a);
     </script>
  ```
+ 方式二
+ 
+ 隐式类型转换  
+ 为任意数据类型做两次非运算，即可将其转换成布尔值（Boolean）
  # 6.运算符
  运算符也叫操作符，通过运算符可以对一个或多个值进行运算，并获取运算结果    
  比如typeof就是运算符，可以获得一个值的类型  
  返回值是字符串  
  ## 6.1 算数运算符 + - * / %  
- 当对非数字类型的值运算时，先转换成数字再计算 任何数和NaN运算都是NaN  
- 特殊情况 两个字符串运算会进行拼串操作  
+ 当对非数字类型的值运算时，先转换成数字再计算   
+ 任何数和NaN运算都是NaN  
+ 两个字符串运算会进行拼串操作  
  任何值和字符串运算，会先转换成字符串再拼接
  ```
- 
+     <script>
+        var a = 123;
+        var result = typeof a;
+        console.log(result);
+        console.log(typeof result);
+        // typeof的返回值是个字符串
+        var b = 123;
+        b = undefined + "456";
+        console.log(b);
+        console.log(typeof b);//undefined456  string
+    </script>
  ```
+任何值做- * /时，都会转换成number计算
+## 6.2 一元运算符
+一元运算符，只需要一个操作数  
++ - 正号负号，对于非number值，可以先转换成number 再计算
+一元运算符优先于算数运算符  
+### 自增自减
+自增可以使变量在自身的基础上加1，原变量的值立即增加1  
+自增分为两种后++/前++ 无论是a++还是++a，都会立即使原变量的值立即自增1  
+不同的是，a++和++a的值不同  
+a++的值等于原变量的值  
+先赋值后运算
+
+++a的值等于自增后的值  
+先运算后赋值
+
+自减同理
+
+例1：
+```
+    <script>
+        var d = 20;
+        var a = d++ + ++d +d;
+        console.log("a = "+a);
+        //a = 20 + 22 +22 = 64
+        var b = 20;
+        b = b++;
+        console.log("b = "+b);
+        //b=10
+    </script>
+```
+例2：
+```
+        var n1 = 10,n2 = 20;
+        var n = n1++;
+        console.log("n = "+n);//10
+        console.log("n1 = "+n1);//11
+        n = ++n1;
+        console.log("n = "+n);//12
+        console.log("n1 = "+n1);//12
+        n = n2--;
+        console.log("n = "+n);//20
+        console.log("n2 = "+n2);//19
+        n=--n2;
+        console.log("n = "+n);//18
+        console.log("n2 = "+n2);//18
+```
+## 6.3逻辑运算符
+三种逻辑运算符  
+! 非  
+!可以用来对一个值进行非运算 所谓非运算就是值对一个布尔值进行取反操作，true变false，false变true 如果对一个值进行两次取反，它不会变化 如果对非布尔值进行元素，则会将其转换为布尔值，然后再取反 所以我们可以利用该特点，来将一个其他的数据类型转换为布尔值 可以为一个任意数据类型取两次反，来将其转换为布尔值，原理和Boolean()函数一样
+
+&& 与
+        两个值都为true时才输出true，若果第一个值是false，则不会看第二个值
+
+|| 或  
