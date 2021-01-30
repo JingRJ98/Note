@@ -459,4 +459,305 @@ if语句后的`{}`不是必须的，但是尽量写
 		}
 	</script>
 ```
-## 7.2 switch 条件分支语句
+练习3
+```
+		<script type="text/javascript">
+			/*
+			 * 	编写程序，由键盘输入三个整数分别存入变量num1、num2、num3，
+			 * 	对他们进行排序，并且从小到大输出。
+			 */
+			var num1 = +prompt("请输入第一个数：");
+			var num2 = +prompt("请输入第二个数：");
+			var num3 = +prompt("请输入第三个数：");
+			var max_num,middle_num,min_num;
+			if(num1>=num2){
+				if(num1>=num3){
+					max_num = num1;
+					if(num2>=num3){
+						middle_num = num2;
+						min_num = num3;
+					}
+					else{
+						middle_num = num3;
+						min_num = num2;
+					}
+				}
+				else{
+					middle_num = num1;
+					min_num = num2;
+					max_num = num3;
+				}
+			}
+			else{
+				if(num2>=num3){
+					max_num = num2;
+					if(num1>=num3){
+					middle_num = num1;
+					min_num = num3;
+					max_num = num2;
+					}
+					else{
+					middle_num = num3;
+					min_num = num1;
+					max_num = num2;
+					}
+				}
+				else{
+					middle_num = num2;
+					max_num = num3;
+					min_num = num1;
+				}
+			}
+			alert(min_num +"，"+middle_num+"，"+max_num);
+
+		</script>
+```
+## 7.2 条件分支语句
+条件分支语句也叫switch语句  
+语法：`switch(条件表达式){语句}`  
+执行时会将case后的值和switch后面的条件表达式的值进行全等比较，如果结果为true，则从当前case处开始执行，如果结果为false，则继续比较，使用break退出switch语句  
+所有结果都是false，则转到default内容  
+switch和if语句有重合部分，根据实际使用 
+```
+        var num = 2;
+        switch(num){
+            case 1:console.log("一");
+            break;
+            case 2:console.log("二");
+            break;
+            case 3:console.log("三");
+            break;
+	    default:
+	    break;
+        }
+```
+##### 练习1
+```
+		<script type="text/javascript">
+			/*
+			 * 对于成绩大于60分的，输出'合格'。低于60分的，输出'不合格'
+			 */
+			var grade = +prompt("请输入成绩：");
+			switch(parseInt(grade/10)){
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
+				console.log("成绩合格");
+				break;
+				default:
+					console.log("成绩不合格！");
+					break;
+			}
+		</script>
+```
+## 7.3 while循环
+反复执行一段代码多次  
+创建一个循环1、初始化变量 2、在循环中设置条件表达式 3、定义一个更新表达式，每次更新初始化变量  
+```
+    <script>
+        var i = 1;
+        // while循环
+        while(i<1){
+            document.write(i++ +"<br/>");
+        }
+        // do循环
+        do{
+            document.write(i++ +"<br/>");
+        }while(i<1)
+    </script>
+```
+do循环先执行再判断保证循环体至少执行一次，while先判断再执行  
+while练习：假设投资的年利率为5%，求1000块增长到5000块需要多少年？
+```
+    <script>
+        var money=1000,i = 0;
+        while(money<5000){
+            money *= 1.05;
+            i++;
+        }
+        console.log("money=:"+money);
+        console.log("年=:"+i);
+    </script>
+```
+## 7.4 for循环
+ ```
+ for(初始化表达式; 条件表达式; 更新表达式) {
+    语句...;
+}
+1、执行初始化表达式
+2、执行条件表达式，结果为true执行语句，false终止循环
+3、执行更新表达式
+4、重复第二步
+
+for循环的三个部分都可以省略，也可写在外部，全部省略为死循环
+ ```
+ #### 练习
+ 练习1
+ ```
+     <script>
+        // 求1到100所有奇数的和
+        var sum=0; //定义sum初始为0
+        for(i=0;i<100;++i){
+            i++;
+            sum += i;
+        }
+        document.write(sum+"<br/>");       
+    </script>
+ ```
+ 练习2
+ ```
+     <script>
+        // 打印1-100之间所有7的倍数的个数及总和
+        var sum = 0;
+        for(i=1;i<=40;i++){
+            if((i%7) == 0){
+                document.write(i+"<br/>");
+                sum += i;
+            }
+
+        }
+        document.write("所有7的倍数总和=："+sum);
+    </script>
+ ```
+ 练习3
+ ```
+     <script>
+        // 水仙花数
+        // 水仙花数是一个三位数。它每个位上的数字的三次幂之和等于它本身
+        // 例如153=1^3+5^3+3^3
+        var s=0;
+        for(a=1;a<10;a++){
+            for(b=0;b<10;b++){
+                for(c=0;c<10;c++){
+                    if((a*a*a+b*b*b+c*c*c) == a*100+b*10+c){
+                        s=a*100+b*10+c;
+                        document.write(s+"<br/>")
+                    }
+                }
+            }
+        }
+    </script>
+ ```
+ 练习4  
+ 第一版
+ ```
+     <script>
+        // 判断质数
+        var  s = +prompt("请输入一个大于1的整数：");
+        var count =0;
+        for(i=1;i<parseInt(s/2);i++){
+            if(s % i == 0){
+                count++; 
+            }
+            if(count > 1){
+                console.log("不是质数");
+            }
+
+        }
+        // 可以判断不是质数的情况，若是质数，则无输出
+    </script>
+ ```
+ 练习4  
+ 第二版 在第一版的基础上添加了一个标志
+ ```
+     <script>
+        // 判断质数
+        var  s = +prompt("请输入一个大于1的整数：");
+        var count =0;
+
+        var flag = true;//设置一个标志，代表默认输入数是质数
+        for(i=2;i<s;i++){
+            if(s % i == 0){
+                count++; 
+            }
+            if(count == 1){
+                console.log("不是质数");
+                flag = false;
+            }
+
+        }
+        if(flag){
+            console.log("是质数");
+        }
+
+
+    </script>
+ ```
+ 练习5
+ ```
+     <script>
+        /*
+            在页面中输出如下图形
+            *
+            **
+            ***
+            ****
+            *****
+            ******
+            ……
+        */
+       var s=8;
+       for(i=1;i<=s;i++){
+            for(j=1;j<=i;j++){
+                document.write("*");
+            }
+            document.write("<br/>");//换行
+       }
+    </script>
+ ```
+ 练习6
+ ```
+     <script>
+        /*
+            在页面中输出如下图形
+            *****
+            ****
+            ***
+            **
+            *
+            ……
+        */
+       var s=8;
+       for(i=1;i<=s;i++){
+            for(j=s;j>=i;j--){
+                document.write("*");
+            }
+            document.write("<br/>");//换行
+       }
+    </script>
+ ```
+ 练习7
+ ```
+         // 打印九九乘法表
+        for(i=1;i<=9;i++){
+            for(j=1;j<=i;j++){
+                document.write(j+"*"+i+"="+(i*j)+"&nbsp;&nbsp;&nbsp;&nbsp;");
+            }
+            document.write("<br/>")
+        }
+ ```
+ 练习8
+ ```
+     <script>
+        // 输出100以内的质数
+        for(i=2;i<100;i++){
+            var flag = true;
+            for(j=2;j<i;j++){
+                if(i%j == 0){
+                flag = false;
+                }
+            }
+            if(flag){
+                document.write(i+"<br/>");
+            }
+        }
+
+    </script>
+ ```
+ ## 7.5 break和continue
+ break关键字可以用来退出switch语句或循环语句 不能用于if语句，会立即终止离他最近的循环  
+ 可以为循环语句创建标签标记循环，使用break时，可以在break后面跟着标签，这样可以终止指定标签的循环，而不是最近的循环  
+ 
+ continue关键字可以用来跳过当次循环，只会对最近的循环起作用，可以设置标签对指定循环进行作用
