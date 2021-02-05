@@ -919,6 +919,77 @@ return 后可以跟任何值或者不写，相当于返回undefined，可以是�
         }
 ```
 
+## 9.7构造函数
+创建一个构造函数，专门用来创建person对象。构造函数是一个普通的函数，创建方式和普通函数没有区别，不同的是构造函数首字母大写  
+构造函数和普通函数的区别就是调用方式的不同，普通函数是直接调用，构造函数需要new关键字调用  
+构建函数的执行流程  
+1、理科创建一个新的对象  
+2、将新建的对象设置为函数中的this，在构造函数中可以用this来引用新的对象    
+3、执行函数中的代码  
+4、将新建的对象作为返回值返回  
+
+使用同一个构造函数创建的对象，称为一类对象，也将一个构造函数称为类，通过一个构造函数创建的对象，叫做实例
+
+使用instanceof可以检查一个对象是否是一个类的实例，如果是返回true，否则返回false，所有对象都是object的实例。
+```
+        function Person(name,age,gender){
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+            this.sayName = function(){
+                alert(this.name);
+            };
+        }
+        var per = new Person("孙悟空",18,"男");
+        var per2 = new Person("玉兔精",20,"女");
+        console.log(per2);
+```
+## 9.8构造函数的缺陷
+方法被反复创建新的，浪费资源  
+可以将sayName方法在全局作用域中定义，实现共享  
+
+改造前：
+```
+        // 方法是在构造函数的内部创建的
+        // 每执行一次都会创建一个新的sayName 所有实例的sayName都是唯一的
+        // 构造函数执行一次就会创建一个新的方法，但是方法都是一样的，这是没有必要的，可以使所有的对象共享同一个方法
+        
+        function Person(name,age,gender){
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+            // 向对象中添加一个方法
+            this.sayName = function(){
+                alert("大家好~~~我是"+this.name);
+            };
+        }
+        //创建person的实例
+        var per = new Person("孙悟空",18,"男");
+        var per2 = new Person("白骨精",18,"女");
+        var per3 = new Person("沙和尚",48,"男");
+        per3.sayName();
+```
+改造后：
+```
+        // 创建一个sayName共用方法
+        function fun(){
+            alert("大家好~~~我是"+this.name);
+        };
+        function Person(name,age,gender){
+            this.name = name;
+            this.age = age;
+            this.gender = gender;
+            // 向对象中添加一个方法
+            this.sayName = fun;
+            };
+        
+        //创建person的实例
+        var per = new Person("孙悟空",18,"男");
+        var per2 = new Person("白骨精",18,"女");
+        var per3 = new Person("沙和尚",48,"男");
+        per3.sayName();
+```
+将函数定义在全局定义域中，污染了全局作用域的命名空间，而且定义在全局作用域中也很不安全
 # 10.作用域
 作用域指一个变量作用的范围，js中一共两种作用域
 
@@ -993,6 +1064,7 @@ return 后可以跟任何值或者不写，相当于返回undefined，可以是�
         obj.sayName();
         obj2.sayName();
 ```
+4.以构造函数调用，this就是新创建的对象
 
 # 13.使用工厂创建对象
 通过该方法可以大量创建对象
@@ -1014,3 +1086,5 @@ return 后可以跟任何值或者不写，相当于返回undefined，可以是�
         var obj4 = creatPerson("沙和尚",38,"男");
         obj4.sayName();
 ```
+# 14.原型
+prototype 创建的每一个函数都会向函数中添加一个属性prototype（唯一的）这个属性对应的对象，这个对象就是原型对象
