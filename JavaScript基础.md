@@ -44,7 +44,10 @@ String字符串
     \t 制表符
     \\ 表示\
 ```
+通过.length可以查看字符串的长度
+`console.log(str.length);`
 
+字符串+其他类型，结果都是字符串
 ## 4.2. Number
 
 在JS中所有的数值都是Number类型，包括整数和浮点数
@@ -132,11 +135,20 @@ Undefined（未定义）类型的值只有一个，就undefind
 对于Number和Boolean实际上就是调用toString()方法 但是对于null和undefined，不会调用toString()方法 它会将null直接转换为"null" 将number直接转换为"number"
 
 方式三  
+拼接字符串方法（最常用）  
 隐式的类型转换，浏览器自动完成，实际上也调用String()函数
 ```
 c = c + '';
 ```
 ## 5.2 转换成number
+字符串转数值  
+1、纯数字字符串 直接转换为对应数字  
+2、如果字符串中有非数字，转换成NaN  
+3、空字符串，转换成数字0  
+4、布尔值转数值 true转成1 false转成0    
+5、null转数值，结果为0    
+6、undefined转数值 结果为NaN  
+
 方式一  
 使用Number()函数
 ```
@@ -147,17 +159,8 @@ c = c + '';
         console.log(typeof a);
     </script>
 ```
-字符串转数值  
-1、纯数字字符串 直接转换为对应数字  
-2、如果字符串中有非数字，转换成NaN  
-3、空字符串，转换成数字0
-布尔值转数值 true转成1 false转成0    
 
-null转数值，结果为0  
-
-undefined转数值 结果为NaN  
-
-方式二
+方式二（重要）
 parseInt函数转换成整数  
 parseFloat函数转换成浮点数
 ```
@@ -170,6 +173,12 @@ parseFloat函数转换成浮点数
 ```
 注意 首个字符必须是数字，否则输出NaN  
 对非string使用parseInt或者parseFloat 会先转换成string再操作
+
+方式三
+隐式转换 算术运算中，自动转换成数字型
+```
+'12' - 0
+```
 
 ##### 其他进制
 ```
@@ -194,6 +203,8 @@ parseFloat函数转换成浮点数
  字符串除了空，都输出true  
  null和undefined都转换成false  
  对象也会转成true
+ 
+ 一言以蔽之，代表空，否定的值都会被转换成false
  ```
     <script>
         var a = 123;
@@ -311,7 +322,6 @@ isNaN()判断是否是NaN，若是，返回true
 
 === 判断两个值是否全等，不会对数值进行类型转换，如果类型不一样，直接返回false  
 !== 判断两个数值是否不全等，不会自动类型转换，两个值类型不同，直接返回true  
-
 
 ## 6.6Unicode编码
 ```
@@ -824,9 +834,9 @@ JS中的变量都是保存在栈内存中，基本数据类型的值直接在栈
         fun();
         fun();
 ```
-在实际开发中很少采用构建函数来创建一个对象  
+在实际开发中很少采用构建函数来创建  
 
-使用函数声明创建函数：
+更多使用函数声明创建函数：
 ```
         function fun2(){
             console.log("这还是我的函数！！！")
@@ -839,7 +849,7 @@ JS中的变量都是保存在栈内存中，基本数据类型的值直接在栈
 可以在函数的（）指定一个或多个形参，多个形参使用`,`隔开，声明形参就相当于在函数内部声明了对象，但是并不赋值  
 在调用函数时可以在（）中指定实参，实参会赋值给函数中对应的实参  
 调用函数时解析器不会检查实参的类型，可能会收到非法参量  
-也不会检查实参的数量，多余的实参不会被赋值，如果实参数量少于形参数量，未注明的形参是undefined  
+也不会检查实参的数量，多余的实参不会赋值（忽略），如果实参数量少于形参数量，未注明的形参是undefined  
 实参可以是任意数据类型  
 ## 9.2函数返回值
 可以使用return设置函数的返回值，return会作为函数的执行结果返回，可以定义一个变量接受该结果
@@ -853,7 +863,9 @@ JS中的变量都是保存在栈内存中，基本数据类型的值直接在栈
         console.log("resukt="+result);
 ```
 return 后可以跟任何值或者不写，相当于返回undefined，可以是对象、函数……  
-使用return可以结束整个函数
+使用return可以结束整个函数  
+return只能返回后面接近的结果，若要返回多个结果，应当在return后面用`[` `]` 将结果包括进去  
+
 ```
         function fun(){
             alert("函数要执行了~~~");
@@ -871,7 +883,65 @@ return 后可以跟任何值或者不写，相当于返回undefined，可以是�
         }
         fun();
 ```
+练习
+```
+        // 函数比较两个数中的最大值
+        function fun(num1,num2){
+            var max;
+            if(num1 > num2){
+                max = num1;
+            }
+            else{
+                max = num2;
+            }
+            return max;
+        }
+        console.log('最大的数是：'+fun(4,Infinity));
+	
+	 // 改进版(返回值不同)
+        function fun(num1, num2) {
+            var max;
+            if (num1 > num2) {
+                return num1;
+            }
+            else {
+                return num2;
+            }
+        }
+        console.log('最大的数是：'+fun(4,Infinity));
+	
+	
+	// 改进版plus
+        function fun(num1, num2) {
+            return num1 > num2 ? num1 : num2;
+        }
+        console.log('最大的数是：'+fun(4,Infinity));
+```
+练习二
+```
+        // 求数组中最大的元素
+        // 我的思路：冒泡，取最后一个
+        function getMaxArr(arr){
+            for(var i = 0;i<arr.length;i++){
+                for(var j = 0;j<arr.length-i;j++){
+                    if(arr[j]>arr[j+1]){
+                    var a = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = a;
+                    }
+          
+                }
+            }
+            return arr[arr.length-1]
+        }
+        var result = getMaxArr([1,3,7,12,6,6,2,4]);
+        console.log(result);
+```
+break结束当前循环体，如for,while   
+continue 跳出本次过程，继续下一次循环  
+return 结束整个函数中间的代码  
 ## 9.4立即执行函数
+(声明函数)();立即执行函数  
 ```
         // 立即执行
         // 创建匿名函数
@@ -1088,3 +1158,150 @@ return 后可以跟任何值或者不写，相当于返回undefined，可以是�
 ```
 # 14.原型
 prototype 创建的每一个函数都会向函数中添加一个属性prototype（唯一的）这个属性对应的对象，这个对象就是原型对象
+
+# 15. 数组
+数组就是一组数据的集合，将一组数据存在单个变量名下，数组中可以存储任意类型的元素  
+
+## 数组创建
+方式一
+```
+        //  new关键字 创建一个空数组
+        var arr = new Array();
+```
+方式二(常用)
+```
+        // 数组字面量创建数组
+        var arr = [];
+```
+数组里面的数据用`,`隔开  
+声明数组并赋值称为数组初始化  
+## 获取数组元素
+数组名[ 索引号 ] 索引号从0开始
+```
+        console.log(arr[3]);
+```
+没有索引号的元素输出undefined  
+可以通过给指定索引号的数组元素赋值，会替换掉原来的元素  
+不要直接给整个数组赋值！！  
+## 遍历数组
+数组索引号从0开始，i从0开始，i<元素个数
+```
+        // 遍历
+        var arr1 = ['N','M','S','L'];
+        for(var i = 0;i<4;i++){
+            console.log(arr1[i]);
+        }
+```
+数组的长度  
+```
+	console.log(arr.length);
+```
+数组的长度是元素个数，不要和索引号混淆  
+使用长度可以arr.length动态监控数组的长度  
+
+## 练习
+练习一
+```
+        // 求数组元素的和，并求平均
+        var arr = [2,6,1,7,4,10];
+        var sum = 0;
+            var average;
+        for(var i = 0;i<arr.length;i++){
+            sum+=arr[i];
+        }
+        average = sum/arr.length;
+        console.log('和为：'+sum);
+        console.log('平均数为：'+average);
+```
+练习二
+```
+
+        // 求数组最大值
+        var arr = [1,6,1,77,52,25,7,99,90];
+        var max = arr[0];
+        for(var i = 1;i<arr.length;i++){
+            if(arr[i] > max){
+                max = arr[i];
+            }
+        }
+        console.log('数组最大值是：' + max);
+```
+练习三
+```
+        // 分割数组变成字符串
+        var arr = ['N','M','S','L'];
+        var str = '';
+        for(var i = 0;i<arr.length;i++){
+            str += '|'+arr[i];
+        }
+        console.log(str+'|');
+```
+练习四
+```
+	// 在数组中依次放入0-100
+        var arr = [];
+        for(var i = 0;i<100;i++){
+            arr[i] = i+1;
+        }
+        console.log(arr);
+```
+练习五
+```
+        // 将数组中大于10的元素筛选出来存入新数组
+        var arr = [1,23,44,5,66,7,9,10];
+        var arr1 = [];
+        var j = 0;
+        for(var i = 0;i<arr.length;i++){
+            if(arr[i] > 10){
+                arr1[j] = arr[i];
+                j++;
+            }
+        }
+        console.log(arr1);
+```
+练习五补充：可以直接使用arr1[arr1.length]来自动设置新数组的长度，不需要j  
+
+练习六
+```
+       // 将数组中的0删掉，形成新数组
+        var arr = [0,30,0,6,6,6,6,0,0,1,0];
+        var arr1 = [];
+        for(var i = 0;i<arr.length;i++){
+            if(arr[i] !== 0){
+                arr1[arr1.length] = arr[i];
+            }
+        }
+        console.log(arr1);
+```
+练习七
+```
+        // 将数组的内容左右翻转
+        var arr = ['N','M','hhh','S','L','c'];
+        var arr1 = [];
+        for(var i = arr.length-1;i>=0;i--){
+            arr1[arr1.length] = arr[i];
+        }
+        console.log(arr1);
+```
+
+## 冒泡排序
+冒泡排序是一种算法，可以把一系列数据按照一定的顺序进行排列（从小到大或者从大到小）  
+原理：
+```
+        // 冒泡排序
+        var arr = [4,3,5,2,1];
+        // 外层循环确定总趟数
+        for(var i = 0;i<arr.length;i++){
+            // 内循环确定一趟里面的交换次数
+            for(var j = 0;j<arr.length-i;j++){
+                // 内部交换两个元素
+                if(arr[j]>arr[j+1]){
+                    var a = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = a;
+
+                }
+            }
+        }
+        console.log(arr);
+```
