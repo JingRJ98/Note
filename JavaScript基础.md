@@ -1464,7 +1464,59 @@ arguments实际上是伪数组
 js中对象分为三种：自定义对象，内置对象，浏览器对象  
 内置对象是js语言自带的对象，供开发者使用，并提供一些最基本或必要的功能/属性/方法  
 
-### Math对象
+## 16.1Math对象
+math数学对象 不是一个构造函数，不需要new调用，可以直接使用里面的属性和方法  
+```
+        console.log(Math.PI);  //3.141592653589793
+        console.log(Math.max(1,99,3));
+        console.log(Math.max(1,-1));
+        console.log(Math.max(1,'hhh'));// NaN
+        console.log(Math.max());// -Infinity
+```
+例
+```
+ var myMath = {
+            PI:3.121592653589,
+            max:function(){
+                var max = arguments[0];
+                for(var i = 1;i<arguments.length;i++){
+                    if(arguments[i]>max){
+                        max = arguments[i];
+                    }
+                }
+                return max;
+            }
+        }
 
+        console.log(myMath.PI);
+        console.log(myMath.max(1,2,3,4,1));
 
+```
+### 16.1.1 绝对值方法
+Math.abs();
+输入为字符型，会自动隐式转换，若不能转换成数字则输出NaN  
 
+### 16.1.2 三个取整方法
+###### 1、Math.floor()
+向下取整
+```
+        console.log(Math.floor(0.9));//0
+        console.log(Math.floor(1.1));//1
+```
+###### 2. Math.ceil()
+向上取整
+###### 3.Math.round()
+四舍五入取整  
+.5在负数时，也是向大取（取绝对值更小的数字）
+```
+        console.log(Math.round(-1.8));//-2
+        console.log(Math.round(-1.5));//-1
+        console.log(Math.round(-1.1));//-1
+```
+
+### 16.1.3随机数方法
+可以用来生成一个0-1 `[0,1)` 之间的随机数 
+
+生成一个0-x之间的随机数`Math.round(Math.random()*x)`  
+
+生成一个x~y之间的随机数 Math.round(Math.random()*(y-x)+x)
