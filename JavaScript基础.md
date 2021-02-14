@@ -1515,8 +1515,96 @@ Math.abs();
 ```
 
 ### 16.1.3随机数方法
-可以用来生成一个0-1 `[0,1)` 之间的随机数 
+可以用来生成一个0-1 `[0,1)` 之间的随机数 `console.log(Math.random());`
 
-生成一个0-x之间的随机数`Math.round(Math.random()*x)`  
+生成一个0-x之间的随机数`console.log(Math.random()*x)`  
 
-生成一个x~y之间的随机数 Math.round(Math.random()*(y-x)+x)
+生成一个x~y之间的随机数 `console.log(Math.random()*(y-x)+x)`  
+
+生成两个数之间的整数（包含这两个数）
+```
+        // 生成两个数之间的整数（包含这两个数）
+        function getRandom(min,max){
+            return Math.floor(Math.random()*(max-min+1))+min;
+
+        }
+        console.log(getRandom(1,3));
+```
+随机点名
+```
+        // 生成两个数之间的整数（包含这两个数）
+        function getRandom(min,max){
+            return Math.floor(Math.random()*(max-min+1))+min;
+
+        }
+        //随机点名
+        var arr = ['a','b','c']; //输入人名
+        console.log(arr[getRandom(0,arr.length-1)]);//arr.length是数组中的元素个数，但是数组索引号是从0~arr.length-1
+```
+猜数字
+```
+        // 猜数字
+            // 生成两个数之间的整数（包含这两个数）
+            function getRandom(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        var num = getRandom(1, 10);// 系统生成一个数
+        while (true) {
+            var getnumber = prompt('请输入1~10之间的数：');
+            if (num < getnumber) {
+                alert('大了');
+            }
+            else if (num > getnumber) {
+                alert('小了');
+
+            }
+            else {
+                alert('你猜对了！！！');
+                break;// 退出整个循环
+            }
+        }
+```
+
+## 16.2 Date对象
+日期对象是一个构造函数，必须使用new关键字来调用创建日期对象
+```
+        var date = new Date();
+        console.log(date);
+        // 不带任何参数输出当前时间
+
+        // 字符串型 输出指定的时间
+        var date1 = new Date('2010-10-1 8:8:8');
+        console.log(date1);
+```
+### 16.2.1 Date的方法
+###### getFullYear() 年
+获取本地时间当年的年份
+###### getMonth() 月
+获取本地时间当前的月份（0-11）第0个月表示1月，所以输出结果比实际月份少1
+###### getDate() 日
+获取当前时间的日期
+###### getDay() 星期几
+获取当前日期对象是周几 会返回一个0-6的值  
+0 表示周日 1-6表示周一到周六   
+###### getHours() 时
+获取当前时间的小时数
+###### getMinutes() 分
+获取当前时间的分钟数
+###### getSeconds() 秒
+获取当前时间的秒数
+###### 获得毫秒数
+获得距离1970年1月1号0时0分过去了多少毫秒  
+1秒 = 1000毫秒  
+```
+        var date = new Date();
+	console.log(date.getTime());
+	// 或者
+	console.log(date.valueOf());
+	
+	// 简单写法（最常用的用法）
+        var date1 = +new Date;
+        console.log(date1);
+	
+	//H5新增的更更简单的写法
+	console.log(Date.now());
+```
