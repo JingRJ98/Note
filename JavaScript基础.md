@@ -1497,15 +1497,15 @@ Math.abs();
 输入为字符型，会自动隐式转换，若不能转换成数字则输出NaN  
 
 ### 16.1.2 三个取整方法
-###### 1、Math.floor()
+#### 1、Math.floor()
 向下取整
 ```
         console.log(Math.floor(0.9));//0
         console.log(Math.floor(1.1));//1
 ```
-###### 2. Math.ceil()
+#### 2. Math.ceil()
 向上取整
-###### 3.Math.round()
+#### 3.Math.round()
 四舍五入取整  
 .5在负数时，也是向大取（取绝对值更小的数字）
 ```
@@ -1577,22 +1577,22 @@ Math.abs();
         console.log(date1);
 ```
 ### 16.2.1 Date的方法
-###### getFullYear() 年
+##### getFullYear() 年
 获取本地时间当年的年份
-###### getMonth() 月
+##### getMonth() 月
 获取本地时间当前的月份（0-11）第0个月表示1月，所以输出结果比实际月份少1
-###### getDate() 日
+##### getDate() 日
 获取当前时间的日期
-###### getDay() 星期几
+##### getDay() 星期几
 获取当前日期对象是周几 会返回一个0-6的值  
 0 表示周日 1-6表示周一到周六   
-###### getHours() 时
+##### getHours() 时
 获取当前时间的小时数
-###### getMinutes() 分
+##### getMinutes() 分
 获取当前时间的分钟数
-###### getSeconds() 秒
+##### getSeconds() 秒
 获取当前时间的秒数
-###### 获得毫秒数
+##### 获得毫秒数
 获得距离1970年1月1号0时0分过去了多少毫秒  
 1秒 = 1000毫秒  
 ```
@@ -1608,3 +1608,203 @@ Math.abs();
 	//H5新增的更更简单的写法
 	console.log(Date.now());
 ```
+### 16.2.2 倒计时
+```
+ // 倒计时
+        function countDown(time){
+            var nowTime = +new Date();//当前时间
+            var inputTime = +new Date(time);// 用户输入的时间
+            var times = (inputTime - nowTime)/1000;// 距离目标时间还有多少秒
+            var s = parseInt(times % 60);//秒
+            s = s < 10 ? '0'+s : s;
+            var m = parseInt(times/60%60);//分
+            m = m < 10 ? '0'+m : m;
+            var h = parseInt(times/3600%24);//时
+            h = h < 10 ? '0'+h : h;
+            var d = parseInt(times/3600/24);//天
+            d = d < 10 ? '0'+d : d;
+            return d + '天' + h + '时' + m + '分' + s + '秒';
+
+        }
+        console.log(countDown('2021-2-18 8:00:00'));// 时间需要写成字符串格式
+
+```
+## 16.3 数组对象
+判断是否是数组
+```
+        var arr = [];
+        var obj = {};
+        console.log(arr instanceof Array);
+        // 返回true
+        console.log(obj instanceof Array);
+        // 返回false
+
+        console.log(Array.isArray(arr));
+```
+### 添加/删除数组元素
+push(参数1……)  
+末尾添加一个或多个元素，修改原数组，返回新数组的长度  
+
+pop()  
+删除数组最后一个元素，把数组长度减1，无参数，修改原数组  
+返回它删除的元素的值  
+
+unshift()   
+向数组的开头添加一个或多个元素，修改原数组  
+返回新数组的长度  
+
+shift()  
+删除数组的第一个元素，数组长度减一，无参数，修改原数组  
+返回第一个元素的值
+
+### 筛选数组
+```
+        // 将数组中大于某个值的元素删除，并将剩下的元素存入新数组里面
+        var arr = [1500,1200,4000,3000,1000,1800];
+        var newArr = []; // 新建数组存放保留的数据
+        for(var i = 0;i < arr.length;i++){
+            if(arr[i] < 2000){
+                // newArr[newArr.length] = arr[i];
+                newArr.push(arr[i]);
+                // 把符合要求的arr元素向新空数组的末尾添加
+            }
+        }
+        console.log(newArr);
+```
+### 数组排序
+reverse()  
+颠倒数组中的元素的顺序，无参数  
+该方法会改变原数组，返回新数组  
+```
+    var arr = [1,2,3,4,5,6];
+    console.log(arr.reverse());
+```
+
+sort()  
+对数组的顺序进行排序  
+改变原数组，返回新数组  
+```
+        var arr1 = [1,3,2,5,2];
+        arr1.sort();
+        console.log(arr1);
+```
+注意：sort()只能处理个位数的排序，因为只对首位数字比较，两位数的排序
+```
+        var arr2 = [1,22,13,4,77,5];
+        arr2.sort(function(a,b){
+            return a - b;
+        });
+        console.log(arr2);
+        // 输出 [1, 4, 5, 13, 22, 77]
+```
+` a-b `从小到大  
+` b-a `从大到小  
+
+### 数组索引
+indexOf()  
+数组中查找给定元素的第一个索引位置  
+如果存在返回第一个出现的指定元素的索引号，如果没有就返回-1  
+
+lastIndexOf()  
+在数组中查找指定元素的最后一个索引位置，没有返回-1  
+```
+        var arr = [1,2,3,3,3,4,4,45,5,5,56,6,6,7,6,6,6,6,6,6,6,6,6,6,33,4,2,6,];
+        console.log(arr.length);//28
+        console.log(arr.indexOf(6));// 返回第一个6的索引号11
+        console.log(arr.indexOf(100)); // -1
+        console.log(arr.lastIndexOf(6)); // 27
+```
+### 数组去重（重点案例）
+```
+        var arr = [1,2,'-1','-1',3,3,3,4,4,45,5,5,56,6,6,7,6,6,6,6,6,6,6,6,6,6,33,4,2,6,];
+        // console.log(arr.length);//28
+        var arr1 = [];
+        for(var i = 0;i<arr.length;i++){
+            if(arr1.indexOf(arr[i]) == -1){
+                // 在新数组中查找旧数组元素的第一个索引
+                // 等于-1说明新数组中没有旧数组的这个元素
+                // 则将旧数组中的这个元素放到新数组中
+                // 实现去重
+                arr1[arr1.length] = arr[i];
+            }
+        }
+        console.log(arr1);
+        //  [1, 2, 3, 4, 45, 5, 56, 6, 7, 33]
+```
+### 数组转换成字符串
+toString()  
+将数组转换成字符串，逗号隔开，返回一个字符串  
+
+join('自定义的分隔符')  
+用于将数组中所有元素转换为一个字符串，返回一个字符串  
+```
+        var arr = [1,2,'-1','-1',3,3,3,4,4,45,5,5,56,6,6,7,6,6,6,6,6,6,6,6,6,6,33,4,2,6,];
+        console.log(arr.toString());
+        // 1,2,-1,-1,3,3,3,4,4,45,5,5,56,6,6,7,6,6,6,6,6,6,6,6,6,6,33,4,2,6
+        console.log(arr.join('|'));
+        // 1|2|-1|-1|3|3|3|4|4|45|5|5|56|6|6|7|6|6|6|6|6|6|6|6|6|6|33|4|2|6
+```
+## 16.4 字符串对象
+### 16.4.1 包装
+对象才有属性和方法，复杂数据类型才有属性和方法  
+但是简单数据类型也可以有属性 
+
+基本包装类型就是把简单数据类型包装成复杂数据类,这样简单数据类型就有了属性和方法 
+在JS中为我们提供了三个包装类，通过这三个包装类可以将基本数据类型的数据转换为对象
+
+new String() 可以将基本数据类型字符串转换为String对象  
+
+new Number() 可以将基本数据类型的数字转换为Number对象
+
+new Boolean() 可以将基本数据类型的布尔值转换为Boolean对象
+
+注意：我们在实际应用中不会使用基本数据类型的对象，如果使用基本数据类型的对象，在做一些比较时可能会带来一些不可预期的结果  
+方法和属性只能添加给对象，不能添加给基本数据类型 当我们对一些基本数据类型的值去调用属性和方法时，浏览器会临时使用包装类将其转换为对象，然后在调用对象的属性和方法 调用完以后，在将其转换为基本数据类型
+```
+        var str = 'andy';
+        console.log(str.length); // 4
+
+        // 包装过程
+        // (1) 把简单数据类型转换成复杂数据类型
+        var temp = new String('andy');
+        // (2) 把临时变量的值给str
+        str = temp;
+        // (3) 销毁临时变量
+        temp = null;
+
+```
+### 16.4.2 字符串不可变
+指的是字符串的值内容不可变，只是地址变了，内存中新开辟一个空间存放新的字符串内容  
+所以不要大量拼接字符串  
+字符串所有的方法都不会修改字符串本身，都是新开辟空间存放新的字符串（字符串的不可变性）  
+### 根据字符返回位置
+indexOf('查找的字符')  
+要查找的字符起始位置  
+查不到返回-1  
+
+indexOf('要查找的字符',[起始的索引号位置])  
+从索引号位置往后查  
+查不到返回-1  
+```
+        var str = 'abcdefgccccedf';
+        console.log(str.indexOf('c'));// 2
+        console.log(str.indexOf('c',[2]));// 2
+        console.log(str.indexOf('c',[3]));// 7
+```
+lastIndexOf()  
+从后往前找，只找第一个匹配的位置  
+
+例子
+```
+        // 查找字符串中所有o的位置以及出现的次数
+        var str = 'oooabcdefoxyozzopp';
+        var index = str.indexOf('o');// 6
+        var num = 0;
+        while(index !== -1){
+            console.log(index);
+            num++;
+            index = str.indexOf('o',[index+1]);
+        }
+        console.log('o出现了'+ num +'次');
+```
+### 根据位置返回字符（重要）
