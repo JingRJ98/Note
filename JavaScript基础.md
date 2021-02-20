@@ -1808,3 +1808,277 @@ lastIndexOf()
         console.log('o出现了'+ num +'次');
 ```
 ### 根据位置返回字符（重要）
+charAt(index)  
+返回指定位置的字符（index字符串的索引号）  
+str.charAt(0)
+```
+        var str = 'abcde';
+        console.log(str.charAt(3));// d
+        // 遍历所有的字符
+        for(var i = 0;i<str.length;i++){
+            console.log(str.charAt(i));
+        }
+```
+
+charCodeAt(index)  
+获取指定位置字符的ASCII码  
+str.charCodeAt(0)  
+用以判断用户按了哪一个键  
+```
+        var str = 'abcde';
+        // 遍历所有的字符
+        for(var i = 0;i<str.length;i++){
+            console.log(str.charCodeAt(i));
+            // 97 98 99 100 101
+        }
+```
+
+str[index]  
+获取指定位置处字符  
+H5新增,IE8支持 和charAt()等效  
+```
+        var str = 'abcde';
+        console.log(str[3]);// d
+        // 遍历所有的字符
+        for(var i = 0;i<str.length;i++){
+            console.log(str[i]);
+            // a b c d e
+        }
+
+```
+
+例
+```
+        // 查找字符串里面出现最多次的字符以及出现的次数
+        var str ='aamjkbcdefooedfoogk';
+        var obj = {};// 新建对象保存所有出现过的字符和次数
+        for(var i = 0;i<str.length;i++){
+            var character = str.charAt(i);
+            if(obj[character]){
+                // 对象里面已有的属性值加一
+                obj[character]++;
+
+            } 
+            else{
+                // 对象里面原先没有的属性赋值为1
+                obj[character] = 1;
+            }
+        }
+        console.log(obj);
+        var max = 0;
+        var ch = '';
+        for(var k in obj){
+            // k得到的是属性名
+            // obj[k]得到属性值
+            if(obj[k] > max){
+                max = obj[k];
+                ch = k;// 因为k属于局部变量，在for循环外无意义
+            }
+
+        }
+
+        console.log('出现次数最多的字母是 '+ ch + ' 出现了'+ max + '次');
+        // 出现次数最多的字母是 o 出现了4次
+```
+### 字符串操作方法
+concat(str1,st2……)  
+用于连接多个字符串。等价于+，但是+更常用  
+```
+        var str = 'jrj';
+        console.log(str.concat('SB','JRJ','kkkkk'));
+        // jrjSBJRJkkkkk
+```
+
+substr(start,length)  
+从start开始，length是取的个数  
+```
+        var str1 = 'kkkkkjrjkkkkk';
+        console.log(str1.substr(5,3));
+        // 从索引号5开始取，取三个字符 jrj
+```
+### 替换字符
+replace()  
+只会替换第一个字符  
+```
+        var str = 'kjrjkkjrj';
+        console.log(str.replace('j','t'));
+        // ktrjkkjrj
+```
+替换所有
+```
+        var str = 'jrjrjrjrjrj';
+        while(str.indexOf('j') !== -1){
+            str = str.replace('j','*')
+
+        }
+        console.log(str);
+```
+### 字符转换成数组
+split('分隔符')  
+```
+        var str = 'a|b|c|b|d';
+        console.log(str.split('|'));
+        // 根据字符串的分隔符区分数组里面的分隔符
+        //  ["a", "b", "c", "b", "d"]
+```
+
+-------------------------
+# 17简单数据类型和复杂数据类型
+简单数据类型又叫基本数据类型或者值类型，复杂数据类型又叫引用类型  
+值类型，在变量中存储的是值本身  
+string number Boolean undefined null  
+注意：typeof null 会输出object，是一个空的对象  
+
+复杂数据类型：在存储变量中存储的仅仅是地址（引用），因此叫做引用数据类型  
+通过new关键字创建的对象（系统对象，自定义对象）如object array date等  
+
+## 17.1堆和栈
+栈 存放简单数据类型 直接存放的是值  
+堆 存放复杂数据类型，首先在栈里面存放十六进制的地址指向堆，一般由程序员分配释放，若程序员不释放，由垃圾回收机制回收    
+
+## 17.2传参
+### 简单类型传参
+函数的形参也可以看作变量，把值类型变量作为参数传递给形参时，其实是把变量在栈空间里面的值复制一份给形参，当局部对形参做任何修改，都不会改变外部变量的值  
+
+### 复杂类型传参
+函数的形参可以看做变量，当把引用类型的变量传给形参时，其实是把变量在栈空间里保存的堆地址复制给了形参，形参和实参保存的是同一个堆地址，指向同一个堆数据，所以操作的是同一个对象  
+
+-----------
+# web apis
+api application programming interface(应用程序编程接口)预定义的函数，提供应用程序与开发人员基于软件或硬件得以访问的能力，不需要访问源码或者内部机制 `接口`  
+
+web api是操作浏览器功能和页面元素的API（DOM和BOM）  
+web api很多都是方法（函数）  
+# DOM
+DOM document object model 文档对象模型 处理可扩展标记语言的标准编程`接口`  
+通过接口可以改变网页的内容样式等  
+## 获取元素
+### 1、根据ID获取
+getElementById(),返回的是对象
+```
+	<body>
+	    <!-- <div class="box1"></div> -->
+	    <div id = "time">2021-2-20</div>
+	    <script>
+		// 因为文档页面从上到下，所以script写在标签的下面
+		var timer = document.getElementById('time');// 参数是ID
+		console.log(timer);
+		// 返回的是对象，如果找不到返回null
+		console.dir(timer);// dir打印返回的元素对象，更好的查看属性和方法
+
+	    </script>
+	</body>
+```
+### 2、根据标签名获取
+getElementByTagName() 返回的对象的集合以伪数组的形式存储  
+我们想要依次打印元素对象可以采取遍历的形式  
+返回的元素是动态的  
+页面只有一个，返回的还是以伪数组的形式  
+没有元素，返回的是空的伪数组  
+
+可以通过父元素获取内部子元素 必须指明是哪一个父元素  
+### 3、通过类名获取
+getElementByClassName()  
+不兼容IE8及以下浏览器
+
+### 4、querySelector()
+返回指定选择器的第一个元素对象  
+```
+    <div class="box">1</div>
+    <div class="box">2</div>
+
+    <script>
+        var firstBox = document.querySelector('.box');
+        console.log(firstBox);
+        // 返回第一个box
+        // 参数必须带符号，类，ID等
+    </script>
+```
+### 5、querySelectorAll()
+返回指定选择器的所有元素对象集合  
+
+## 获取特殊元素
+### 获取body元素
+```
+    <script>
+        var bbb = document.body;
+        console.log(bbb);
+    </script>
+```
+### 获取html元素
+```
+    <script>
+        var hhh = document.documentElement;
+        console.log(hhh);
+    </script>
+```
+
+---------
+## 事件
+事件由三部分组成，事件源，事件类型，事件处理程序
+
+事件源：事件被触发的对象 如创建的按钮
+
+事件类型：如何触发如鼠标点击，鼠标经过，键盘按下
+
+事件处理程序：通过一个函数赋值的方式完成
+```
+	<body>
+		// 创建事件源
+	    <button id="btn">点我 就现在</button>
+
+	    <script>
+		// 获取按钮节点
+		var btn = document.getElementById('btn');
+		// 事件处理程序
+		btn.onclick = function(){
+		    alert('点我干嘛？？？');
+		}
+	    </script>
+	</body>
+```
+### 事件基础
+执行事件的步骤  
+1、获取事件源  
+2、注册事件（绑定事件）  
+3、添加事件处理程序  
+
+## 操作元素
+element.innerText  
+从起始位置到终止位置的内容，但它去除html标签，同时空格和换行也会去掉  
+
+element.innerHTML  
+起始位置到终止位置的全部内容，包括html标签，同时保留空格和换行  
+```
+    <button>显示当前系统时间</button>
+    <div>某个时间</div>
+    <script>
+        // 点击按钮，div里面的文字发生变化
+        // 1、获取元素
+        var btn = document.querySelector('button');
+        var div = document.querySelector('div');
+        // 2、注册事件
+        btn.onclick = function(){
+            div.innerText = getD();// 若果这行代码不在函数里面，相当于不注册事件直接运行
+        }
+        function getD(){
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth()+1;
+            var date111 = date.getDate();// 千万要注意！！！这里的变量不能和一开始的date冲突，否则显示下一行的getDay is not a function
+            var day = date.getDay();
+            var arr = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+
+            return'今天是'+year+'年'+month+'月'+date111+'日'+arr[day];
+
+        }
+        console.log(getD() );
+    </script>
+```
+
+.innerText和.innerHTML区别 ：前者不识别HTML标签
+```
+ 	var div = document.querySelector('div');
+        div.innerHTML = '今天天气<strong>真不错</strong>';// 识别标签
+        // div.innerText = '今天天气<strong>真不错</strong>'; // 不识别，直接当文本输出
+```
