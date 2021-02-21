@@ -2130,6 +2130,41 @@ element.innerHTML
 
 ##### 实例 模仿京东登录
 ```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            width: 400px;
+            border-bottom: 2px solid #aaa;
+            /* 上边距100px 居中 */
+            margin: 200px auto;
+            position: relative;
+        }
+
+        .box input {
+            width: 370px;
+            height: 30px;
+            border: 0px;
+            /* 去除外边框 */
+            outline: none;
+        }
+
+        .box img {
+            width: 24px;
+            position: absolute;
+            top: 5px;
+            right: 0px;
+
+        }
+    </style>
+</head>
+
+<body>
     <div class="box">
         <label for="">
             <img src="./img/闭眼.png" alt="" id="eye">
@@ -2163,4 +2198,7 @@ element.innerHTML
 
 
     </script>
+</body>
+
+</html>
 ```
