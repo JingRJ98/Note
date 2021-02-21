@@ -2082,3 +2082,85 @@ element.innerHTML
         div.innerHTML = '今天天气<strong>真不错</strong>';// 识别标签
         // div.innerText = '今天天气<strong>真不错</strong>'; // 不识别，直接当文本输出
 ```
+## 修改元素属性
+```
+    <button id="ldh">刘德华</button>    
+    <button id="lcw">梁朝伟</button>    
+    <br><br>
+    <img src="./img/01.jpg" alt="" title="刘德华">
+    <script>
+        // 1、获取元素
+        var ldh = document.getElementById('ldh');
+        var lcw = document.getElementById('lcw');
+        var img = document.querySelector('img');
+
+        // 2、注册事件
+        ldh.onclick = function(){
+            img.src = "./img/01.jpg";
+            img.tile = "刘德华";
+        }
+        lcw.onclick = function(){
+            img.src = "./img/02.jpg";
+            img.title = "梁朝伟";
+        }
+    </script>
+```
+## 操作表单元素
+```
+    <button>按钮</button>
+    <input type="text" value="输入内容">
+    <script>
+        // 1、获取元素
+        var btn = document.querySelector('button');
+        var inp = document.querySelector('input');
+
+        // 2、注册事件
+        btn.onclick = function(){
+            // input.innerHTML = '点击了';
+            // innerHTML是修改普通盒子比如div标签内的内容
+            
+            // 表单内容是通过value修改
+            inp.value = '点击了';
+	    
+	    // 如果按钮点击一次后不能再被点击，使用disabled
+            this.disabled = true;// this指向的是事件函数的调用者
+        }
+    </script>
+```
+
+##### 实例 模仿京东登录
+```
+    <div class="box">
+        <label for="">
+            <img src="./img/闭眼.png" alt="" id="eye">
+        </label>
+        <input type="password" name="" id="password">
+    </div>
+    <script>
+        // 1、获取元素
+        var eye = document.getElementById('eye');
+        var password = document.getElementById('password');
+
+        // 2、注册事件
+        // 设置一个flag来表示密码框的状态，通过01变换实现切换
+        var flag = 0;
+        eye.onclick = function () {
+            if (flag == 0) {
+                // 密码框改为文本框 显示密码
+                password.type = "text";
+                eye.src = "./img/睁眼.png";
+                flag = 1;
+            }
+            else{
+                // 密码框改为密码框 不显示密码
+                password.type = "password";
+                eye.src = "./img/闭眼.png";
+                flag = 0;
+            }
+
+        }
+
+
+
+    </script>
+```
