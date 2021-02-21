@@ -2128,7 +2128,7 @@ element.innerHTML
     </script>
 ```
 
-##### 实例 模仿京东登录
+##### 京东登录
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -2202,3 +2202,267 @@ element.innerHTML
 
 </html>
 ```
+## 操作样式属性
+通过JS修改元素的大小颜色位置等样式  
+Js里面的样式采取驼峰命名法 fontSize，backgroundColor  
+Js修改style样式操作，产生的是行内样式，比CSS样式的权重更高  
+##### 淘宝关闭二维码样式
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>淘宝二维码</title>
+    <style>
+        .box{
+            width: 74px;
+            height: 88px;
+            border: 1px solid #ccc;
+            margin: 100px auto;
+            font-size: 12px;
+            text-align: center;
+            color: #f40;
+            position: relative;
+        }
+        .box img{
+            height: 50px;
+            margin-top: 5px;
+        }
+        .box .close-btn{
+            position: absolute;
+            top: -1px;
+            left: -16px;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            font-family:Arial, Helvetica, sans-serif;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<div class="box">
+        <body>
+        淘宝二维码
+        <img src="./img/02.jpg" alt="">
+        <i class="close-btn">×</i>
+    </div>
+    <script>
+        // 1、获取元素
+        var btn = document.querySelector('.close-btn');
+        var box = document.querySelector('.box');
+        // 2、注册事件 程序处理
+        btn.onclick = function(){
+            box.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+```
+### 焦点
+onfocus 得到焦点   
+onblur 失去焦点  
+##### 京东文本框
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>京东文本框</title>
+    <style>
+        input{
+            color: #ccc;
+            margin: 200px 200px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" value="手机">
+    <script>
+        // 1、获取元素
+        var text = document.querySelector('input');
+        // 2、注册事件 获得焦点事件
+        text.onfocus = function(){
+            if(this.value == '手机'){
+                text.value = "";
+            }
+            // 获得焦点使文本框字色变深
+            this.style.color = '#333';
+        }
+        // 3、失去焦点事件
+        text.onblur = function(){
+            if(this.value == ''){
+                text.value = '手机';
+            }
+            // 失去焦点文本框颜色变浅
+            this.style.color = '#ccc';
+        }
+    </script>
+</body>
+</html>
+```
+## 通过className修改样式
+如果使用element.style.修改元素样式，一次只能改一种  
+可以在CSS中写好类包含所有样式改变  
+然后通过给当前元素添加类名  
+this.className = '类名';
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            width: 200px;
+            height: 200px;
+            background-color: #bfa;
+        }
+        .change{
+            background-color: #aab;
+            color: #f60;
+            font-size: 25px;
+            margin: 200px auto;
+        }
+    </style>
+</head>
+<body>
+    <div>嗷嗷嗷啊</div>
+    <script>
+        // 1、获取元素
+        var div = document.querySelector('div');
+        // 2、注册事件 程序处理
+        div.onclick = function(){
+            // 修改当前元素的类名
+            // 类名已经写在style里面
+            this.className = 'change';
+        }
+    </script>
+</body>
+</html>
+```
+注意：className会直接覆盖掉原先的类名！  
+如果需要保留原先的类名  
+this.className = '原先的类名 修改的类名';  
+
+--------------
+## 排他思想（算法）
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button>按钮1</button>
+    <button>按钮2</button>
+    <button>按钮3</button>
+    <button>按钮4</button>
+    <button>按钮5</button>
+    <script>
+        // 1、获取元素
+        var btns = document.getElementsByTagName('button');
+        // 2、注册事件 程序处理
+        for(var i = 0;i<btns.length;i++){
+            btns[i].onclick = function(){
+                /*
+                    1、先把所有按钮的背景颜色去掉
+                    2、再把选中的按钮颜色变色
+                */
+               for(var j=0;j<btns.length;j++){
+                   btns[j].style.backgroundColor = '';
+               }
+                this.style.backgroundColor = '#abf';
+            }
+        }
+    </script>
+</body>
+</html>
+```
+### 鼠标经过
+onmouseover 鼠标经过  
+onmouseout 鼠标离开  
+
+
+## 自定义属性操作
+#### 获取属性值
+element.属性 获取属性值 获取内置属性   
+element.getAttribute('属性') getAttribute获取的是自己设置的属性  
+
+#### 修改属性值
+element.属性 = '值'  
+element.getAttribute('属性','值')  
+
+#### 移除属性值
+.removeAttribute('属性')  
+
+# 节点
+获取元素常用的两种形式  
+1、利用DOM方法获取  
+逻辑性不强，繁琐
+
+2、节点操作  
+利用父子兄弟关系获取  
+
+页面中所有的内容都是节点 DOM中使用node表示节点  
+一般来说，节点至少拥有节点类型（nodetype） 节点名称（nodeName） 节点值（nodevalue）三个基本属性  
+元素节点的节点类型是1  
+属性节点的节点类型是2  
+文本节点的节点类型是3（包括文字 空格 换行）  
+实际开发中，主要操作的是元素节点  
+
+## 节点层级
+### 父节点
+.parentNode 离元素最近的父节点  
+找不到父节点返回null  
+### 子节点
+通过具体的元素节点调用
+
+1.childNodes  
+表示当前节点的所有子节点（换行也算文本节点）注意：IE8及以下，不会将空白换行作为节点  
+可以使用nodeType判断，去除换行  
+文本节点类型是3，元素节点类型是1    
+也可以使用children（非标准）  
+
+2.firstChild   
+表示当前节点的第一个子节点  
+可能包含其他节点  
+firstElementChild IE9
+
+3.lastChild  
+表示当前节点的最后一个子节点  
+可能包含其他节点  
+lastElementChild IE9  
+
+实际开发中可能使用.children[0]表示第一个节点  
+.children[ul.children.lengtth - 1]表示最后一个节点  
+### 兄弟节点
+1.previousSibling  
+属性，表示当前节点的前一个兄弟节点  
+包含元素或文本节点（换行）  
+
+2.extSibling  
+属性，表示当前节点的后一个兄弟节点  
+包含元素或文本节点（换行）  
+nextElementSilbling 下一个兄弟元素节点不包括文本（换行）  
+
+兼容性问题：自己封装一个函数  
+
+## 创建节点
+.createElement  
+可以用于创建一个元素节点对象 它需要一个标签名作为参数，将会根据该标签名创建元素节点对象 并将创建好的对象作为返回值返回   
+例如： 创建一个li标签 ` var li1 = document.createElement("li"); `
+
+appendChild()  
+向一个父节点末尾添加一个新的子节点 用法: 父节点.appendChild(子节点);
+
+insertBefore()  
+可以在指定的子节点前插入新的子节点 语法： 父节点.insertBefore(新节点(前),旧节点(后));  
+
+## 删除节点
+removeChild()  
+可以删除一个子节点 语法： 父节点.removeChild(子节点); 
+
+
