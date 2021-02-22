@@ -2463,6 +2463,59 @@ insertBefore()
 
 ## 删除节点
 removeChild()  
-可以删除一个子节点 语法： 父节点.removeChild(子节点); 
+```
+        // 1、获取元素
+        var ul = document.querySelector('ul');
+        // 2、删除元素
+        ul.removeChild(ul.children[0]);// 删除第一个子节点
+```
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button>删除</button>
+    <ul>
+        <li>A</li>
+        <li>B</li>
+        <li>C</li>
+        <li>D</li>
+    </ul>
+    <script>
+        // // 1、获取元素
+        var ul = document.querySelector('ul');
+        // // 2、删除元素
+        // ul.removeChild(ul.children[0]);// 删除第一个子节点
 
+        // 点击按钮依次删除元素
+        var btn = document.querySelector('button');
+        btn.onclick = function(){
+            
+            if(ul.children.length == 0){
+                // 禁用删除按钮
+                this.disabled = true;
+            }
+            else{
+                ul.removeChild(ul.children[0]);
+            }
+        }
+    </script>
+</body>
+</html>
+```
+## 复制节点
+```
+        // 1、获取元素
+        var ul = document.querySelector('ul');
+        // 2、复制节点
+        var lili = ul.children[0].cloneNode(true);
 
+        ul.appendChild(lili);
+```
+如果.cloneNode()括号里面参数为空，或者是false，称为浅拷贝，只复制节点本身，不复制节点内容  
+
+括号里为true称为深拷贝，复制标签和内容  
