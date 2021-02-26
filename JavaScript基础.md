@@ -2522,5 +2522,399 @@ removeChild()
  
 ##### 动态生成表格
 ```
+<!DOCTYPE html>
+<html lang="zh">
 
+<head>
+    <meta charset="UTF-8">
+    <title>表格</title>
+    <style>
+        table {
+            width: 500px;
+            margin: 100px auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        td,
+        th {
+            border: solid 1px #333;
+        }
+
+        thead tr {
+            /* 设置表头 行 */
+            height: 40px;
+            background-color: #abf;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>名字</th>
+                <th>科目</th>
+                <th>成绩</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        // 1、学生数据
+        var dates = [
+            {
+                name: '孙悟空',
+                subject: '语文',
+                score: 100
+            },
+            {
+                name: '唐僧',
+                subject: '语文',
+                score: 95
+            },
+            {
+                name: '猪八戒',
+                subject: '语文',
+                score: 70
+            },
+            {
+                name: '沙和尚',
+                subject: '语文',
+                score: 90
+            }
+        ];
+        // 2、创建表格的行数（数组元素个数）
+        var tbody = document.querySelector('tbody');
+        for (var i = 0; i < dates.length; i++) {
+            var tr = document.createElement('tr');
+            tbody.appendChild(tr);
+            // td是数组里面对象的属性个数 dates[i]
+            // 遍历对象
+            // j 得到属性名
+            //  obj[j] 得到属性值
+            for (var j in dates[i]) {
+                // 创建单元格
+                var td = document.createElement('td');
+                // 把每个单元格添加元素到行里面
+                tr.appendChild(td);
+                // dates是数组 dates[i]是数组里面第i个元素（对象） dates[i][j]是数组里面对象的属性值
+                // console.log(dates[i][j]);
+                // 向单元格中添加元素
+                td.innerHTML = dates[i][j];
+            }
+
+            // 创建操作里面的 删除单元格
+            // 3、创建单元格，数字取决于数组每个元素 对象里面的属性个数
+            var td = document.createElement('td');
+            tr.appendChild(td);
+            // 在最后一个单元格添加内容(删除的链接)
+            td.innerHTML = '<a href="#">删除</a>'
+
+        }
+
+        // 4、创建删除操作 获取所有的a 创建事件 删除a所在的行
+        var aaa = document.querySelectorAll('a');
+        for(var i = 0;i<aaa.length;i++){
+            aaa[i].onclick = function(){
+                // 点击链接删除a所在的行
+                tbody.removeChild(this.parentNode.parentNode);
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
 ```
+## 三种动态创建元素的区别
+document.write() （很少使用）     
+直接将内容写入页面的内容流，但是文档流执行完毕，会导致页面全部重绘  
+```
+<body>
+    <button>
+        按钮
+    </button>
+    <script>
+        var btn = document.querySelector('button');
+        btn.onclick = function(){
+            document.write('<div>123</div>');
+        }
+
+    </script>
+</body>
+```
+
+innerHTML创建元素  
+```
+<body>
+    <div class="inn"></div>
+    <script>
+        var inn = document.querySelector('.inn');
+        inn.innerHTML = '<a href="#">百度</a>';
+    </script>
+</body>
+```
+
+createElement()  
+```
+<body>
+    <div class="cre"></div>
+    <script>
+        var cre = document.querySelector('.cre');
+        var a = document.createElement('a');
+        cre.appendChild(a);
+    </script>
+</body>
+```
+使用innerHTML()创建大量元素时，效率更高  
+但是前提是不要使用拼接字符串的形式，而要使用数组的形式  
+结构稍微复杂  
+
+## DOM重点核心
+为了能够让js操作HTML，js有一套自己的dom接口  
+学习dom主要是针对元素的操作,增，删，改，查，属性操作，事件操作
+
+增加：  
+document.write()  
+innerHTML  
+creatElement()  
+
+删除：  
+removeChild
+
+改：  
+1、修改dom元素属性 src href title等  
+2、修改普通元素内容 innerHTML innerText  
+3、修改表单元素 value type disabled  
+4、修改元素样式style className  
+
+查：  
+1、DOM提供的API getElementById getElementByTagName (不推荐)  
+2、H5新方法 querySelector querySelectorAll (推荐)  
+3、利用节点获取元素 父子兄弟节点  
+
+属性操作：  
+setAttribute 设置dom属性值  
+getAttribute 得到属性值  
+removeAttribute 删除属性  
+
+事件操作：  
+鼠标点击 经过 离开 焦点等  
+
+--------------------
+
+# 事件高级
+
+## 注册事件
+注册事件有两种方式：传统方式和监听注册事件  
+### 传统
+on开头的例如onclick鼠标点击    
+特点 注册事件的唯一性，只运行靠后的处理函数  
+### 方法监听注册事件  
+addEventListener() 推荐使用  
+
+同一个元素同一个事件可以添加多个监听器 不会出现唯一性问题  
+该方法三个参数   
+type 事件类型字符串带引号 比如click mouseover 不带on   
+listener 事件处理函数 事件发生时 会调用该函数  
+useCapture 可选参数 是一个布尔值默认false   
+
+addEventListener()中的this是绑定事件的对象 不支持IE8及以下
+
+attachEvent() 在IE8中及以前可以使用attachEvent()来绑定事件  
+参数：   
+1.事件的字符串，要on  
+2.回调函数 这个方法也可以同时为一个事件绑定多个处理函数   
+不同的是它是后绑定先执行，执行顺序和addEventListener()相反  
+
+注册事件兼容性问题解决
+```
+        function addEventListener(element ,eventName,fn){
+            // 判断当前浏览器是否支持addEventLisener方法
+            if(element.addEventListener){
+                element.addEventListener(eventName,fn);// 第三个参数默认false
+
+            }
+            else if(element.attachEvent){
+                element.attachEvent('on'+eventName,fn);
+
+            }
+            else{
+                element['on'+ eventName] = fn;
+            }
+        }
+```
+## 删除事件
+### 传统
+.onclick = null;  
+### 方法监听注册方式
+.removeEventListener(type,listener,useCapture)  
+
+例
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background-color: #bfa;
+        }
+    </style>
+</head>
+<body>
+    <div class="a">1</div>
+    <div class="b">2</div>
+    <div class="c">3</div>
+    <script>
+        var divs = document.querySelectorAll('div');
+
+        // 传统绑定事件
+        divs[0].onclick = function(){
+            alert(111);
+            // 传统删除事件
+            divs[0].onclick = null;
+        }
+
+        // 方法监听注册事件
+        // 三个参数，type字符串要加引号不要on
+        divs[1].addEventListener('click',fn);
+        // 因为要删除函数 所以函数不能使用匿名的
+        function fn(){
+            alert(222);
+            // 方法监听删除
+            divs[1].removeEventListener('click',fn);
+        }
+
+    </script>
+</body>
+</html>
+```
+## DOM事件流
+事件发生时会在元素节点之间按照特定的顺序传播，这个传播过程就是DOM事件流  
+事件流分为三个阶段  
+
+1.捕获阶段 在捕获阶段时从最外层的祖先元素，向目标元素进行事件的捕获，但是默认此时不会触发事件
+
+2.当前目标阶段 事件捕获到目标元素，捕获结束开始在目标元素上触发事件
+
+3.冒泡阶段 事件从目标元素向它的祖先元素传递，依次触发祖先元素上的事件 addEventListener 第三个参数是false或省略 处于冒泡阶段  
+
+如果希望在捕获阶段就触发事件，可以将addEventListener()的第三个参数设置为true，一般情况下我们不会希望在捕获阶段触发事件，所以这个参数默认都是false   
+
+IE8以下的浏览器没有捕获阶段  
+
+## 事件对象
+```
+            // event就是事件对象 写到侦听函数的小括号里 可以当成形参看待
+            // 事件对象只有事件存在才会存在 是系统自动创建的 不需要传递实参
+            // 事件对象是事件一系列相关数据的集合 比如鼠标点击包含鼠标的相关信息 例如鼠标坐标
+            // 键盘事件包含键盘按键信息
+            // 事件对象可以自己命名 event evt e
+            // 事件对象也有兼容性问题 通过window.event 解决
+            // e = e || window.event 
+```
+### 事件对象常见的属性和方法
+e.target 返回触发事件的方法 标准  
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        div{
+            width: 150px;
+            height: 150px;
+            background-color: #abf;
+        }
+    </style>
+</head>
+<body>
+    <div>1234</div>
+    <ul>
+        <li>a</li>
+        <li>b</li>
+        <li>c</li>
+        <li>d</li>
+    </ul>
+    <script>
+        var div = document.querySelector('div');
+        div.addEventListener('click',function(e){
+            console.log(e.target);// 返回触发事件的对象div1234
+            console.log(this);// 返回绑定事件的对象div 1234
+        })
+
+
+        var ul = document.querySelector('ul');
+        ul.addEventListener('click',function(e){
+            console.log(this);// 给ul绑定事件 this指向ul 返回ul
+            console.log(e.target);// 返回点击的li
+        })
+    </script>
+</body>
+</html>
+```
+
+
+e.srcElement 返回触发事件的对象 非标准 ie6-8使用
+
+e.type 返回事件的类型 比如click 不带on  
+
+e.returnValue 该属性阻止默认事件（默认行为）非标准 ie6-8使用 比如不让链接跳转  
+
+e.preventDefault() 该方法阻止默认事件 标准 比如不让链接使用
+
+## 阻止冒泡
+所谓的事件的冒泡指的是事件的向上传导，当后代元素上的事件被触发时，其祖先元素的相同事件也会被触发 在开发中大部分情况冒泡都是有用的，如果不希望发生事件冒泡，可以通过事件对象来取消冒泡
+
+e.stopPropagation()阻止冒泡 标准  
+
+e.cancelBubble = true 该属性阻止冒泡 非标准 ie6-8使用  
+
+## 事件委派
+原理：不给每个子节点单独设置事件监听器 而是事件监听器设置在父节点上 然后利用冒泡原理影响设置每个子节点  
+在父节点上设置事件 然后利用target找到点击li 然后事件冒泡到ul上  
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <ul>
+        <li>a</li>
+        <li>b</li>
+        <li>c</li>
+        <li>d</li>
+    </ul>
+    <script>
+
+
+        var ul = document.querySelector('ul');
+        ul.addEventListener('click',function(e){
+            // alert('aaaaaaa');
+            //  点击某个li时，事件会冒泡到Ul上 弹出
+
+
+            // e.target可以得到当前点击的对象
+            e.target.style.backgroundColor = '#b66';
+        })
+            
+    </script>
+</body>
+</html>
+```
+## 常用的鼠标事件
