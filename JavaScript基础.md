@@ -2917,4 +2917,158 @@ e.cancelBubble = true 该属性阻止冒泡 非标准 ie6-8使用
 </body>
 </html>
 ```
-## 常用的鼠标事件
+
+-----------------
+# BOM
+BOM 是浏览器对象模型 提供了独立于内容而与浏览器窗口进行交互的对象  
+核心对象是window
+
+BOM由一系列对象组成 每个对象提供很多属性和方法  
+
+BOM缺乏标准 各自浏览器自行定义 兼容性较差  
+
+window对象是浏览器的顶级对象    
+1、是js访问浏览器窗口的一个接口  
+2、是一个全局对象 定义在全局作用域中的变量、函数都会变成window对象的属性和方法    
+注意window下一个特殊属性window.name  
+
+## window常见事件
+#### 窗口加载事件  
+文档内容完全加载完才会触发该事件（包括图像 脚本文件 CSS文件等）  
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        // // window.onload 传统的窗口加载事件
+        // // 但是只能写一次 写了多次会以最后一次为准
+        // window.onload = function () {
+        //     var btn = document.querySelector('button');
+        //     btn.addEventListener('click', function () {
+        //         alert('点我干嘛？？？');
+        //     })
+        // }
+
+
+
+        // 新的窗口加载事件
+        // 可以写多个
+        window.addEventListener('load', function () {
+            var btn = document.querySelector('button');
+            btn.addEventListener('click', function () {
+                alert('点我干嘛？？？');
+            })
+        })
+
+        // DOMContentLoaded 是DOM元素加载完毕 不包含图片flash CSS等就可以执行
+        // load需要等页面全部元素都加载完才能执行
+        document.addEventListener('DOMContentLoaded',function(){
+            alert(1234);
+        })
+    </script>
+
+</head>
+
+<body>
+    <button>按钮</button>
+
+</body>
+
+</html>
+```
+#### 调整窗口事件
+` window.addEventListener('resize',function(){}) ` 只要窗口像素发生变化就触发  
+响应式布局
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            width: 300px;
+            height: 300px;
+            background-color: #abf;
+        }
+    </style>
+    <script>
+        // 使script里面代码在所有元素加载完成后执行
+        window.addEventListener('load',function(){
+            var div = document.querySelector('div');
+            window.addEventListener('resize',function(){
+                console.log(window.innerWidth);// 获取当前窗口宽度
+                if(window.innerWidth < 600){
+                    div.style.display = 'none';
+
+                }
+                else{
+                    div.style.display = 'block';
+                }
+            })
+
+        })
+    </script>
+</head>
+<body>
+    <div></div>
+</body>
+</html>
+```
+## 定时器
+setTimeout()延时调用 延时调用一个函数不马上执行，而是隔一段时间后再执行，而且只会只会执行一次  
+` var timer = setTimeout(function(){},3000); `    
+延时时间单位是毫秒 可以省略 省略默认为0  
+调用函数可以直接写函数 也可以写函数名。或者'函数名()'单引号不推荐使用    
+页面中可能有很多定时器 经常给定时器加标识符    
+setTimeout里面的函数称为回调函数callback  
+
+例：五秒后关闭广告 
+```
+    <img src="../黑马pink/img/01.jpg" alt="" class="ad">
+    <script>
+        var ad = document.querySelector('.ad');
+        setTimeout(function(){
+            ad.style.display = 'none';
+        },5000);
+        //  五秒后广告隐藏
+    </script>
+```
+
+停止定时器 clearTimeout() 关闭一个延时调用  
+```
+    <img src="../黑马pink/img/01.jpg" alt="" class="ad">
+    <br>
+    <br>
+    <br>
+    <button>
+        停止定时器
+    </button>
+    <script>
+        var ad = document.querySelector('.ad');
+        // 给定时器设置ID
+        var timer1 = setTimeout(function(){
+            ad.style.display = 'none';
+        },3000);
+        //  三秒后广告隐藏
+        var btn = document.querySelector('button');
+        btn.addEventListener('click',function(){
+            clearTimeout(timer1);// 参数是定时器标识符
+        })
+
+    </script>
+```
+
+setInterval()定时调用 可以将一个函数，每隔一段时间被调用依次 ,setTimeout()只会在定时器结束后调用一次    
+` var timer = setInterval(function(){},1000);  `
+
+clearInterval() 关闭定时器可以接收任意参数，如果参数是一个有效的定时器的标识，则停止对应的定时器，如果参数不是一个有效的标识，则什么也不做可以接收任意参数，如果参数是一个有效的定时器的标识，则停止对应的定时器，如果参数不是一个有效的标识，则什么也不做  
+
+
+
+
