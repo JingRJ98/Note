@@ -3069,6 +3069,95 @@ setInterval()定时调用 可以将一个函数，每隔一段时间被调用依
 
 clearInterval() 关闭定时器可以接收任意参数，如果参数是一个有效的定时器的标识，则停止对应的定时器，如果参数不是一个有效的标识，则什么也不做可以接收任意参数，如果参数是一个有效的定时器的标识，则停止对应的定时器，如果参数不是一个有效的标识，则什么也不做  
 
+### this指向问题
+一般this指向的是调用它的对象  
+1、全局作用域或者普通函数中this指向的是全局对象window 定时器里面的this指向的是window    
+2、方法中谁调用this this指向谁  
+3、构造函数中this指向构造函数的实例    
+
+## JS执行机制
+JS是单线程，同一时间只能做一件事  
+H5允许js中出现同步和异步   
+
+同步任务都在主线程上执行 形成执行栈
+
+异步任务一般通过回调函数实现  
+分为三类1、普通事件如点击 2、资源加载 3、定时器  
+
+先执行栈中同步任务 遇到异步任务放入另一个任务队列中 一旦同步任务栈中执行完毕，将异步任务的任务队列中任务执行栈最下方执行  
+
+事件循环：主线程不断获得任务队列中的任务，执行任务，再获取任务，继续执行任务……
+
+## location对象
+window对象给我们提供一个location属性用于获取或者设置窗体的URL，并且可以用于解析URL，该属性返回的是一个对象，所以称为location对象  
+
+URL：统一资源定位符，互联网上标准资源的地址 互联网上每个资源都有唯一的URL，包含的信息指出资源的位置以及浏览器怎么处理它  
+` protocal://host[:port]/path/[?query]#fragment `  
+` 通信协议://主机（域名）[:端口号省略时使用默认端口]/路径/[?参数]#片段（锚点、链接） `  
+
+跳转页面  
+```
+<body>
+    <!-- <button>
+        跳转
+    </button> -->
+    <div></div>
+    <script>
+        // var btn = document.querySelector('button');
+        var div = document.querySelector('div');
+        // btn.addEventListener('click', function () {
+        //     location.href = 'http://www.baidu.com';
+        // })
+
+        // 自动跳转
+        var time1 = 5;
+        setInterval(function () {
+            // 时间为0时自动跳转到百度
+            if (time1 == 0) { 
+                location.href = 'http://www.baidu.com'; 
+            }
+            // 利用定时器设置页面秒数变化
+            else {
+                div.innerHTML = '您的页面将在' + time1 + '后跳转';
+                time1--;
+            }
+
+        }, 1000);
+    </script>
+</body>
+```
+assign()方法 用来跳转到其他的页面，作用和.href一样，记录；浏览历史可以实现后退功能 ` location.assign("http://www.baidu.com"); `  
+
+replace() 可以使用一个新的页面替换当前页面，调用完毕也会跳转页面，不会生成历史记录，不能使用回退按钮回退  
+
+reload()方法 用于重新加载当前页面，作用和刷新按钮一样 如果在方法中传递一个true，作为参数，则会强制清空缓存刷新页面    
+Ctrl + F5可以强制刷新    
+
+## Navigator对象
+代表的当前浏览器的信息，通过该对象可以来识别不同的浏览器,由于历史原因，Navigator对象中的大部分属性都已经不能帮助我们识别浏览器了 一般我们只会使用userAgent来判断浏览器的信息， userAgent是一个字符串，这个字符串中包含有用来描述浏览器信息的内容， 不同的浏览器会有不同的userAgent  
+```
+            var ua = navigator.userAgent;
+			console.log(ua);
+			if(/firefox/i.test(ua)){
+				alert("你是火狐！！！");
+			}else if(/chrome/i.test(ua)){
+				alert("你是Chrome");
+			}else if(/msie/i.test(ua)){
+				alert("你是IE浏览器~~~");
+			}else if("ActiveXObject" in window){
+				alert("你是IE11，枪毙了你~~~");
+			}
+```
+## History对象
+对象可以用来操作浏览器向前或向后翻页  
+length属性 可以获取到当成访问的链接数量  
+back()方法 可以用来回退到上一个页面，作用和浏览器的回退按钮一样  
+forward()方法 可以跳转下一个页面，作用和浏览器的前进按钮一样  
+go()方法 可以用来跳转到指定的页面，它需要一个整数作为参数： 1:表示向前跳转一个页面 相当于forward() 2:表示向前跳转两个页面 -1:表示向后跳转一个页面 -2:表示向后跳转两个页面  
+
+history对象在实际开发中使用较少，但是在一些OA系统中可能用到  
+
+
 
 
 
