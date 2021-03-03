@@ -3157,7 +3157,49 @@ go()方法 可以用来跳转到指定的页面，它需要一个整数作为参
 
 history对象在实际开发中使用较少，但是在一些OA系统中可能用到  
 
+# JSON
+JavaScript Object Notation 
+
+JS中的对象只有JS自己认识，其他的语法都不认识 JSON就是一个特殊格式的字符串，这个字符串可以被任意语言所识别，并且可以转换为任意语言中的对象，JSON在开发中主要用于数据的交互  
+
+JSON和JS对象的格式一样，只不过JSON字符串中的属性名必须加双引号，其他和JS一致
+
+常用JSON分类： 1.对象{} 2.数组[]  
+JSON允许的值： 1.字符串 2.数值 3.布尔值 4.null 5.对象 6.数组  
+
+```
+	var obj = '{
+		      "name" : "jrj", 
+		      "age" : 18, 
+		      "gender" : "男"
+		    }';
+
+	var arr = '[1, 2, 3, "hello", true]';
+```
+
+## JSON → JS
+JSON.parse();  
+将JSON字符串转换为JS对象,需要一个JSON字符串作为参数，将字符串转为JS对象返回    
+```
+        var json = '{"name":"jrj","age":18,"gneder":"男"}';
+        // 将JSON字符串转换为JS对象 
+        var o = JSON.parse(json);
+        console.log(o.name);
+```
+## JS → JSON
+JSON.stringify  
+```
+        var obj = {
+            name:"jrj",
+            age:18,
+            gender:"男"
+        }
+        var aaa = JSON.stringify(obj);
+        console.log(aaa);
+	// {"name":"jrj","age":18,"gender":"男"}
+```
+JSON这个对象在IE7及以下不支持，若要兼容IE，可引入外部JS文件
 
 
-
+-----------------------------------------
 
