@@ -223,5 +223,171 @@ box-shadow: inherit;
 box-shadow: initial;
 box-shadow: unset;
 ```
+## 图片水平居中
+原理：  
+1、首先将html和body高度设置为100% 占满整个窗口区域  
+2、利用body设置水平居中  
+3、像body中添加伪元素after(和img形成兄弟元素)  
+4、同时为伪元素和img设置vertical-align: middle; img会参考伪元素垂直居中，因为伪元素display设置为行内块  
+
+```
+    <style>
+        /* 图片水平居中 */
+        html,body{
+            height: 100%;
+        }
+        body{
+            text-align: center;
+        }
+        body:after{
+            content: "";
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+        }
+        img{
+            width: 200px;
+            vertical-align: middle;
+        }
+
+    </style>
+```
+## 倒影
+-webkit-box-reflect 只有webkit才支持,准确来说不是CSS3的内容，但需要知道   
+默认值none 不可继承  
+
+取值 倒影的方向 第一个值。可选值：above below right left
+
+倒影和原图的距离 第二个值：长度单位
+
+渐变 第三个值 如 linear-gradient()
+
+## resize
+resize CSS属性允许你控制一个元素的可调整大小性 注意：一定要配合overflow:auto来使用   
+默认值none 不可继承  
+
+取值  
+none：元素不能被用户缩放  
+both：允许用户在水平和垂直方向上调整元素的大小  
+horizontal：允许用户在水平方向上调整元素的大小   
+vertical：允许用户在垂直方向上调整元素的大小
+
+## box-sizing
+CSS 中的 box-sizing 属性定义了 user agent 应该如何计算一个元素的总宽度和总高度。
+
+在 CSS 盒子模型的默认定义里，对一个元素所设置的 width 与 height 只会应用到这个元素的内容区即content-box。  
+如果这个元素有任何的 border 或 padding ，绘制到屏幕上时的盒子宽度和高度会加上设置的边框和内边距值。  
+这意味着当你调整一个元素的宽度和高度时需要时刻注意到这个元素的边框和内边距。当我们实现响应式布局时，这个特点尤其烦人。
+
+box-sizing 属性可以被用来调整这些表现:  
+content-box 是默认值。如果你设置一个元素的宽为100px，那么这个元素的内容区会有100px 宽，并且任何边框和内边距的宽度都会被增加到最后绘制出来的元素宽度中。  
+border-box 告诉浏览器：你想要设置的边框和内边距的值是包含在width内的。也就是说，如果你将一个元素的width设为100px，那么这100px会包含它的border和padding，内容区的实际宽度是width减去(border + padding)的值。大多数情况下，这使得我们更容易地设定一个元素的宽高。  
+
+尺寸计算公式：  
+width = border + padding + 内容的宽度  
+height = border + padding + 内容的高度  
+注意：border-box不包含margin
+
+
+# 新增UI样式
+## 圆角
+border-radius  
+CSS 属性 border-radius 允许你设置元素的外边框圆角。当使用一个半径时确定一个圆形，当使用两个半径时确定一个椭圆。这个(椭)圆与边框的交集形成圆角效果。  
+该属性是一个简写属性，是将这四个属性 border-top-left-radius、border-top-right-radius、border-bottom-right-radius，和 border-bottom-left-radius 简写为一个属性。   
+默认值0 不可继承  
+
+取值  
+固定的px值定义圆形半径或椭圆的半长轴，半短轴，不能用负值。  
+使用百分比定义圆形半径或椭圆的半长轴，半短轴。水平半轴相当于盒模型的宽度，垂直半轴相当于盒模型的高度，不能用负值
+```
+            /* 椭圆角 */
+            border-radius: 50px / 25px;
+            /* 简写三个值时 左上 （右上 左下） 右下 */
+            border-radius: 20px 40px 100px;
+            /* 简写两个值时 （左上 右下） （右上 左下） */
+            border-radius: 20px 100px;
+```
+注意：百分比值在旧版本Chrome和Safari中不支持 在11.50版本以前的Opera中实现有问题 Gecko2.0（Firefox4）版本前实现不标准，水平半轴和垂直半轴都相对于盒子模型的宽度 在旧版本的iOS（iOS5之前）和Android中（webkit 532之前）不支持  
+所以尽量使用px值  
+
+转动的风车(没有添加动画版)
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 400px;
+            height: 400px;
+            /* border: solid 1px red; */
+
+            /* 居中 */
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            /* 设置动画时间 */
+            transition: 20s;
+        }
+        .box > div{
+            margin: 10px;
+            width: 180px;
+            height: 180px;
+            background-color: #bfa;
+            /* 浮动提升层级半级 */
+            float: left;
+            box-sizing: border-box;
+        }
+        #b1,
+        #b4{
+            border-radius: 0px 50%;
+        }
+        #b2,
+        #b3{
+            border-radius: 50% 0px;
+        }
+        .box:hover{
+            transform: rotate(3600deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div id="b1">1</div>
+        <div id="b2">2</div>
+        <div id="b3">3</div>
+        <div id="b4">4</div>
+    </div>
+</body>
+</html>
+```
+
+## BFC
+BFC（block formatting context）块级格式化上下文 是一个独立的渲染区域，只有block-level box参与，它规定了内部的block-level box如何布局，并且与这个外部区域毫不相干  
+
+BFC布局规则：  
+1、内部的box在垂直方向，一个接一个放置  
+2、BFC区域不会与float box重叠  
+3、内部的box垂直距离由margin决定，属于同一个BFC的两个相邻box的margin会发生重叠  
+4、计算BFC高度时，浮动元素也参与计算（清除haslayout）  
+5、BFC就是页面上一个隔离的独立容器，容器里面的子元素不会影响外部元素
+
+BFC什么时候出现  
+根元素  
+float属性值不是none  
+position 属性值是absolute或者fixed  
+overflow 不是visible  
+display 为inline-block table-cell flex inline-flex  
+
+
+
+
+
 
 
