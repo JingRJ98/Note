@@ -722,46 +722,49 @@ farthset-corner 最远角
 
 ## transition-property
 
-指定应用过渡属性的样式
-默认值为all,表示所有可被动画的属性都表现出过渡动画
-可以指定多个property
+指定应用过渡属性的样式  
+默认值为all,表示所有可被动画的属性都表现出过渡动画  
+可以指定多个property  
 
 ## transition-duration
 
-属性以秒或毫秒为单位指定过渡动画所需的时间（一定要加单位！）
-默认值为0s，表示不出现过渡动画
+属性以秒或毫秒为单位指定过渡动画所需的时间（一定要加单位！）  
+默认值为0s，表示不出现过渡动画  
 
-可以指定多个时长，每个时长都会被应用到由transition-property指定的对应属性上，如果指定的时长个数小于属性个数，那么时长列表会重复。如果时长列表更长，那么该列表会被裁减，两种情况下，列表属性都保持不变
+可以指定多个时长，每个时长都会被应用到由transition-property指定的对应属性上    
+如果指定的时长个数小于属性个数，那么时长列表会依次重复。如果时长列表更长，那么该列表会被裁减，两种情况下，列表属性都保持不变  
 
 ## transition-timing-function
 
-可以规定多个timing-function，通过transition-property属性，可以根据主列表（transition-property的列表）给每个CSS属性相应的timing-function，如果timing-function的个数比主列表数量要少，缺少的值被设置为初始值（ease），如果timing-function比主列表更多，timing-function函数列表会被截断至合适的大小。这两种情况下声明的CSS属性都是有效的
+可以规定多个timing-function，通过transition-property属性，可以根据主列表（transition-property的列表）给每个CSS属性相应的timing-function  
+如果timing-function的个数比主列表数量要少，缺少的值被设置为初始值（ease），如果timing-function比主列表更多，timing-function函数列表会被截断至合适的大小。  
+这两种情况下声明的CSS属性都是有效的  
 
-属性值
-1.ease：（加速再减速）ease函数相当于贝塞尔曲线（0.25，0.1，0.25，1.0）
-2.linear：（匀速）linear函数相当于贝塞尔曲线（0.0，0.0，1.0，1.0）
-3.ease-in：（加速）ease-in函数相当于贝塞尔曲线（0.42，0.0，1.0，1.0）
-4.ease-out：（减速）（0.0，0.0，0.58，1.0）
-5.ease-in-out：（加速然后减速）（0.42，0.0，0.58，1.0）
-6.cubic-bezier:（贝塞尔曲线）
-7.step-start：等同于steps(1,start)
-   step-end：等同于steps(1,end)
-   steps(`<integer>`,[start[end]]?)
-   第一个参数：必须为正整数，指定函数的步数
-   第二个参数：指定每一步的值发生变化的时间点，默认为end
+属性值    
+
+1.ease：（加速再减速）ease函数相当于贝塞尔曲线（0.25，0.1，0.25，1.0）  
+2.linear：（匀速）linear函数相当于贝塞尔曲线（0.0，0.0，1.0，1.0）  
+3.ease-in：（加速）ease-in函数相当于贝塞尔曲线（0.42，0.0，1.0，1.0）  
+4.ease-out：（减速）（0.0，0.0，0.58，1.0）  
+5.ease-in-out：（加速然后减速）（0.42，0.0，0.58，1.0）  
+6.cubic-bezier:（贝塞尔曲线https://cubic-bezier.com/      
+7.step-start：等同于steps(1,start)  
+   step-end：等同于steps(1,end)      
+   第一个参数：必须为正整数，指定函数变化的步数    
+   第二个参数：指定每一步的值发生变化的时间点，默认为end    
 
 ## transition-delay
 
-该属性规定了在过渡效果开始作用之前需要等待的时间
-默认值为0s
-可以指定多个延迟时间，每个延迟时间将会分别作用于你所指定的相符合的css属性。如果指定的时长个数小于属性个数，那么时长列表将会重复，如果时长列表更长，那么该列表会被裁减。两种情况下，属性列表都保持不变
+该属性规定了在过渡效果开始作用之前需要等待的时间  
+默认值为0s  
+可以指定多个延迟时间，每个延迟时间将会分别作用于你所指定的相符合的css属性。如果指定的时长个数小于属性个数，那么时长列表将会重复，如果时长列表更长，那么该列表会被裁减。两种情况下，属性列表都保持不变    
 
 ## 检测过渡是否完成
 
-当过渡完成时触发一个事件，在符合标准的浏览器下，这个事件是transitionend，在webkit下是webkitTransitionEnd
-(每一个拥有过渡的属性在其完成过渡时都会触发一次transitionend事件)
+当过渡完成时触发一个事件，在符合标准的浏览器下，这个事件是transitionend，在webkit下是webkitTransitionEnd  
+(每一个拥有过渡的属性在其完成过渡时都会触发一次transitionend事件)  
 
-在transition完成前设置display:none 时间同样不会触发
+在transition完成前设置display:none 时间同样不会触发  
 
 ## transition过渡中只关注初始状态和结束状态，没有方法可以获取到过渡中每一帧的状态
 
@@ -771,69 +774,67 @@ farthset-corner 最远角
 
 ## transition
 
-CSS效率极高，其样式变化往往都是一瞬完成。
-transition提供了一种在更改CSS属性时控制动画速度的方法。其可以让属性变化变成一个持续一段时间的过程，而不是立即生效的。
-transition CSS 属性是 transition-property，transition-duration，transition-timing-function 和 transition-delay 的一个简写属性。
-默认值
-transition-delay:0s
-transition-duration:0s
-transition-property:all
+CSS效率极高，其样式变化往往都是一瞬完成。  
+transition提供了一种在更改CSS属性时控制动画速度的方法。其可以让属性变化变成一个持续一段时间的过程，而不是立即生效的。  
+transition CSS 属性是 transition-property，transition-duration，transition-timing-function 和 transition-delay 的一个简写属性。  
+默认值  
+transition-delay:0s  
+transition-duration:0s  
+transition-property:all  
 
-注意：transition属性中，各个值的书写顺序很重要，第一个可以解析为时间的值会赋值给transition-duration，第二个可以解析为时间的值会赋值给transition-delay
+注意：transition属性中，各个值的书写顺序很重要，第一个可以解析为时间的值会赋值给transition-duration，第二个可以解析为时间的值会赋值给transition-delay  
 
-推荐书写顺序
-过渡时间 过渡样式 过渡形式 延迟时间，过渡时间 过渡样式 过渡形式 延迟时间...
+推荐书写顺序  
+过渡时间 过渡样式 过渡形式 延迟时间，过渡时间 过渡样式 过渡形式 延迟时间...  
 
 # 2D变形（transform）
 
-transform属性允许你修改CSS视觉格式模型的坐标空间
-transform属性只对block级元素有效
-内部变换都是矩阵变换
+transform属性允许修改CSS视觉格式模型的坐标空间    
+transform属性只对block级元素有效  
+内部变换都是矩阵变换  
 
-注意：transform只对块级元素有效
+注意：transform只对块级元素有效  
 
 ## 旋转（rotate）
 
-`transform: rotate(360deg);`
+`transform: rotate(360deg);`  
 
 ## 平移（translate）
 
-X方向平移：`transform: translateX(200px);`
-Y方向平移：`transform: translateY(200px);`
+X方向平移：`transform: translateX(200px);`  
+Y方向平移：`transform: translateY(200px);`    
+二维平移：`transform: translate(200px, 200px);`    
+可单值可双值可正（向右 向下）可负（向左 向上），第一个值为X方向，第二个值为Y方向  
 
-二维平移：`transform: translate(200px, 200px);`
-可单值可双值可正可负，第一个值为X方向，第二个值为Y 方向
+## 倾斜（skew）  
 
-## 倾斜（skew）
+X方向倾斜：`transform: skewX(45deg);`  
+Y方向倾斜：`transform: skewY(45deg);`  
 
-X方向倾斜：`transform: skewX(45deg);`
-Y方向倾斜：`transform: skewY(45deg);`
+二维倾斜：`transform: skew(45deg, 45deg);`  
+同平移translate     
 
-二维倾斜：`transform: skew(45deg, 45deg);`
-同平移translate
+## 缩放（scale）  
 
-## 缩放（scale）
+X方向缩放：`transform: scaleX(0.5);`   
+Y方向缩放：`transform: scaleY(2);`  
 
-X方向缩放：`transform: scaleX(0.5);`
-Y方向缩放：`transform: scaleY(2);`
-
-二维缩放：`transform: scale(0.5, 2);`
-正值表示缩放程度，单值时X，Y方向缩放相同
-不推荐使用负值由旋转效果
+二维缩放：`transform: scale(0.5, 2);`  
+正值表示缩放程度，单值时X，Y方向缩放相同  
+不推荐使用负值实现旋转效果  
 
 ## 基点的变换（只对位移无影响）
 
-`transform-orign: top left;`
-`transform-orign: 50px 10px;`
-`transform-orign: 50% 10%;`
+`transform-orign: top left;`    
+`transform-orign: 50px 10px;` 表示参照左上距离坐标定义基点  
+`transform-orign: 50% 10%;`  
 
-# 2D变形组合
+## 2D变形组合
 
-2D变形内部都是矩阵变换，矩阵变换不可逆，没有交换律
-2D变形组合底层时从右往左进行矩阵变换（但使用时按字面意思从左往右理解）
+2D变形内部都是矩阵变换，矩阵变换不可逆，没有交换律  
+2D变形组合底层时从右往左进行矩阵变换（但使用时按字面意思从左往右理解）  
 
 ## 实例:扇形导航
-
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -952,27 +953,26 @@ Y方向缩放：`transform: scaleY(2);`
 
 ## 透视（perspective）
 
-在CSS3中，perspective用于激活一个3D空间，使具有3D变换的后代元素产生透视效果，属性值就是透视大小（默认none无透视）
+在CSS3中，perspective用于激活一个3D空间，使具有3D变换的后代元素产生透视效果，属性值就是透视大小（默认none无透视）  
 
-perspective和perspective-origin属性能给舞台（scene，变换元素所处的空间）添加纵深感，结果就是元素距离观看者越近就表现得越大，越远就表现得越小（通过变换可以改变元素在Z轴上的位置）。
+perspective和perspective-origin属性能给舞台（scene，变换元素所处的空间）添加纵深感，结果就是元素距离观看者越近就表现得越大，越远就表现得越小（通过变换可以改变元素在Z轴上的位置）。 
 
-perspective属性指定观看者的眼睛（假设的）与屏幕 （drawing plane）之间的距离。如果将perspective属性的值设为d，则元素的缩放比例就等于d/(d − z)，z是元素在Z轴上的位置，更准确的说是变换前元素所在的与Z轴垂直的平面在Z轴上的坐标位置。
+perspective属性指定观看者的眼睛（假设的）与屏幕 （drawing plane）之间的距离。如果将perspective属性的值设为d，则元素的缩放比例就等于d/(d − z)，z是元素在Z轴上的位置，更准确的说是变换前元素所在的与Z轴垂直的平面在Z轴上的坐标位置。  
 
-![](_v_images/20200213235844828_30495.png)
-简单的理解：透视就是人眼距离屏幕的距离
-透视的作用是使3D场景产生近大远小的效果
-透视是一个不可继承属性，但它可以作用于所有的后代元素
+简单的理解：透视就是人眼距离屏幕的距离   
+透视的作用是使3D场景产生近大远小的效果  
+透视是一个不可继承属性，但它可以作用于所有的后代元素  
 
-形式：
-transform:perspective(depth);
-depth的默认值是none，可以设置为一个长度值，这个长度是沿着Z轴距离坐标原点的距离。
-若使用perspective()函数，那么它必须放置在transform属性的首位，如果放在其他函数之后，则会被忽略。
-这种写法的透视是作用于本身的，一般不使用
+形式：  
+transform:perspective(depth);  
+depth的默认值是none，可以设置为一个长度值，这个长度是沿着Z轴距离坐标原点的距离。  
+若使用perspective()函数，那么它必须放置在transform属性的首位，如果放在其他函数之后，则会被忽略。  
+这种写法的透视是作用于本身的，一般不使用  
 
-perspective:depth;
-和perspective()函数一样，depth的默认值是none，可以设置为一个长度值，这个长度是沿着Z轴距离坐标原点的距离。
-区别在于perspective属性被用于元素的后代元素，而不是元素本身
-应用透视的元素被称为“舞台元素”，舞台元素的所有后代都会受影响（如果后代元素中也添加了perspective属性，效果会叠加不是覆盖）
+perspective:depth;  
+和perspective()函数一样，depth的默认值是none，可以设置为一个长度值，这个长度是沿着Z轴距离坐标原点的距离。  
+区别在于perspective属性被用于元素的后代元素，而不是元素本身  
+应用透视的元素被称为“舞台元素”，舞台元素的所有后代都会受影响（如果后代元素中也添加了perspective属性，效果会叠加不是覆盖）  
 
 ### 灭点
 
@@ -1248,16 +1248,16 @@ hidden和visible，默认为visible
 
 ## animation-name
 
-animation-name属性指定应用的一系列动画，每个名称代表一个由@keyframes定义的动画序列
+animation-name属性指定应用的一系列动画，每个名称代表一个由@keyframes定义的动画序列  
 
-值：
-none 特殊关键字，表示无关键帧
-keyframename 标识动画的字符串
+值：  
+none 特殊关键字，表示无关键帧  
+@keyframename 标识动画的字符串  
 
 ## animation-duration
 
-animation-duration属性指定一个动画周期的时长
-默认值为0s，表示无动画，无单位无效
+animation-duration属性指定一个动画周期的时长  
+默认值为0s，表示无动画，无单位无效  
 
 ## animation-timing-function
 
@@ -1265,72 +1265,74 @@ animation-duration属性指定一个动画周期的时长
 
 动画的默认效果：先加速再加速
 
-ease:先加速再减速，平滑过渡
-linear:匀速，线性过渡
-ease-in:加速
-ease-out:减速
-ease-in-out:先加速再减速
+ease:先加速再减速，平滑过渡  
+linear:匀速，线性过渡  
+ease-in:加速  
+ease-out:减速  
+ease-in-out:先加速再减速  
 
-cublic-bezier(1, 1, 2, 3)
+cublic-bezier(1, 1, 2, 3)  
 
-steps(n,[start | end])
-传入一到两个参数，第一个参数表示将动画n等分，然后动画就会平均地运行
-第二个参数start表示从动画的开头运行，相反end表示从动画的结尾运行
-默认值end
+steps(n,[start | end])  
+传入一到两个参数，第一个参数表示将动画n等分，然后动画就会平均地运行  
+第二个参数start表示从动画的开头运行，相反end表示从动画的结尾运行  
+默认值end  
 
 ## animation-delay
 
 定义动画开始等待的时间，以秒或毫秒（属于动画外的属性）
 
 ## animation-iteration-count
-
+参数：整数数值  
 定义动画执行的次数，重复的是关键帧@keyframe，动画延迟不会被循环
 
-值：
-infinite：无线循环执行动画
-number：动画执行的次数，不可为负值
+值：  
+infinite：无线循环执行动画  
+number：动画执行的次数，不可为负值  
 
 ## animation-direction
 
 定义动画执行的方向
 
-值：
-normal：正常
-reverse：反转，反转的是关键帧和animation-timing-function
-alternate：normal+reverse循环
-alternate-reverse：reverse+normal循环
-
+值：  
+normal：正常  
+reverse：反转，反转的是关键帧和animation-timing-function  
+alternate：normal+reverse循环  
+alternate-reverse：reverse+normal循环  
+ 
 ## animation-fill-model
 
-用来控制元素在动画外的状态
+用来控制元素在动画外的状态  
 
-值：
-none 默认值 动画外的状态保持在动画之前的位置
-backwards from之前的状态与关键帧from相同
-forwards to之后的状态与关键帧to相同
-both backwards+forwards
+值：  
+none 默认值 动画外的状态保持在动画之前的位置    
+backwards from之前的状态与关键帧from相同    
+forwards to之后的状态与关键帧to相同  
+both = backwards+forwards  
 
 ## animation-play-state
 
-管理动画的运行和停止
-
-值：
-running 默认值
-paused 停止
+管理动画的运行和停止  
+ 
+值：    
+running 默认值    
+paused 停止    
 
 ## 关键帧（@keyframes）
 
-语法:
-@keyframes animationName {
+语法:  
+```
+@keyframes animationName {  
     keyframes-selector {
         css-style;
    }
 }
+```
 
 animationName 必写项 定义动画的名称
 
-keyframes-selector 必写项 设定动画关键帧的时间点
-from:0%to:100%
+keyframes-selector 必写项 设定动画关键帧的时间点  
+from:0%to:100%  
 
 css-style css声明
 
@@ -1364,12 +1366,13 @@ animation为动画简写属性
 
 ## flex布局
 
-CSS3 弹性盒子（Flexible Box或Flexbox），是一种用于在页面上布置元素的布局模式，使得当页面布局必须适应不同的屏幕尺寸和不同的显示设备时，元素可预测地运行行/列。对于许多应用程序，弹性盒子模型提供了对块模型的改进，因为它不适用浮动，flex容器的边缘也不会与其内容的边缘折叠。
+CSS3 弹性盒子（Flexible Box或Flexbox），是一种用于在页面上布置元素的布局模式，使得当页面布局必须适应不同的屏幕尺寸和不同的显示设备时，元素可预测地运行行/列。  
+对于许多应用程序，弹性盒子模型提供了对块模型的改进，因为它不适用浮动，flex容器的边缘也不会与其内容的边缘折叠。
 
 注意：弹性容器里的弹性项目如果不设置宽高，弹性项目的高度默认为该行行高 ，而宽度默认由内容撑开，不管是块元素还是行内不可替换元素。
 而对于可替换元素来说，img元素宽高由相应图片撑开，input，textarea，select在单独成行时有初始固定宽高，非单独成行只有初始固定宽度，高度默认为行高，object在单独和非单独成行情况下都有初始固定宽高
 
-### flex基础点
+## flex基础点
 
 1.容器 项目 主轴 副轴
 
@@ -1379,68 +1382,65 @@ CSS3 弹性盒子（Flexible Box或Flexbox），是一种用于在页面上布�
     -webkit-box
     -webkit-flex / flex
 
-### 老版本（-webkit-box）
+## 老版本（-webkit-box）
 
-#### 容器的布局方向
+### 容器的布局方向
 
 -webkit-box-orient属性本质上确定主轴是哪一根
 
-值：
-horizontal：主轴为x轴
-vertical：主轴为y轴
-
+值：   
+horizontal：主轴为x轴  
+vertical：主轴为y轴  
 ```
 display: -webit-box;
 -webkit-box-orient:horizontal;
 ```
 
+### 容器的排列方向
+-webkit-box-direction属性本质上改变了主轴方向  
 
-#### 容器的排列方向
-
--webkit-box-direction属性本质上改变了主轴方向
-
-值：
-normal：从左往右（正方向）
-reverse：从右往左（负方向）
-
+值：  
+normal：（正方向）  
+reverse：（负方向）  
 ```
 display: -webit-box;
 -webkit-box-direction:normal;
 -webkit-box-direction:reverse;
 ```
 
-#### 容器富余空间管理
+### 容器富余空间管理
 
 富裕空间只决定富裕空间的位置，不会给项目去分配空间
 
-主轴
-    -webkit-box-pack
-    主轴是x轴
-    start：富裕空间在右
-    end：富裕空间在左
-    center：富裕空间在两边
-    justify：富裕空间在项目之间
-    主轴是y轴
-    start：富裕空间在下
-    end：富裕空间在上
-    center：富裕空间在两边
-    justify：富裕空间在项目之间
+主轴  
+    -webkit-box-pack  
+    主轴是x轴  
+    start：富裕空间在右  
+    end：富裕空间在左  
+    center：富裕空间在两边  
+    justify：富裕空间在项目之间  
+    主轴是y轴  
+    start：富裕空间在下  
+    end：富裕空间在上  
+    center：富裕空间在两边  
+    justify：富裕空间在项目之间  
 
 
-侧轴
-    -webkit-box-algin
-     侧轴是x轴
-     start：富裕空间在右
-     end：富裕空间在左
-     center：富裕空间在两边
-     justify：富裕空间在项目之间
-     侧轴是y轴
-     start：富裕空间在下
-     end：富裕空间在上
-     center：富裕空间在两边
-     justify：富裕空间在项目之间
+侧轴  
+    -webkit-box-algin  
+     侧轴是x轴  
+     start：富裕空间在右  
+     end：富裕空间在左  
+     center：富裕空间在两边  
+     justify：富裕空间在项目之间  
+     
+     侧轴是y轴  
+     start：富裕空间在下  
+     end：富裕空间在上  
+     center：富裕空间在两边  
+     justify：富裕空间在项目之间   
 
-#### 项目弹性空间管理
+### 项目弹性空间管理
 
 项目弹性空间管理是将富裕空间按比例分配给项目
 
@@ -1448,43 +1448,41 @@ display: -webit-box;
 
 默认值 0
 
-### 新版本（flex）
+## 新版本（flex）
 
-#### 容器的布局方向+排列方向
+### 容器的布局方向+排列方向
 
 flex-direction属性确定主轴以及主轴方向
 
-值：
-row：主轴为x轴方向正向
-row-reverse：主轴为x轴方向负向
-column：主轴为y轴方向正向
-column-reverse：主轴为y轴方向负向
+值：  
+row：主轴为x轴方向正向  
+row-reverse：主轴为x轴方向负向  
+column：主轴为y轴方向正向  
+column-reverse：主轴为y轴方向负向  
 
-#### 容器富裕空间管理
+### 容器富裕空间管理
 
-主轴
-    justify-content
-    flex-start：富裕空间在主轴正方向上
-    flex-end：富裕空间在主轴负方向上
-    center：富裕空间在两边
-    space-between：富裕空间在项目之间
-    space-around：富裕空间在项目两边
+主轴  
+    justify-content  
+    flex-start：富裕空间在主轴正方向上  
+    flex-end：富裕空间在主轴负方向上  
+    center：富裕空间在两边  
+    space-between：富裕空间在项目之间  
+    space-around：富裕空间在项目两边  
 
-侧轴
-    align-items
-    flex-start：富裕空间在侧轴正方向上
-    flex-end：富裕空间在侧轴负方向上
-    center：富裕空间在两边
-    baseline：基线对齐
-    stretch：等高布局（项目没有高度）
+侧轴  
+    align-items  
+    flex-start：富裕空间在侧轴正方向上  
+    flex-end：富裕空间在侧轴负方向上  
+    center：富裕空间在两边  
+    baseline：基线对齐  
+    stretch：等高布局（项目没有高度）  
 
-#### 项目弹性空间管理
+### 项目弹性空间管理
 
 flex-grow属性定义弹性盒子项的拉伸因子
 
-`flex-grow:number弹性因子;`
-
-默认值是0
+`flex-grow:number弹性因子;`,弹性因子设置为1 把富余空间按比例分配给各个项目，默认值是0
 
 ## 新增flex布局详解
 
@@ -1496,35 +1494,35 @@ flex-wrap属性控制了容器为单行/列，并且定义了侧轴的方向，�
 
 默认值：nowrap 不可继承
 
-值：
-nowrap：不换行
-wrap：侧轴正方向堆砌
-wrap-reverse：侧轴负方向堆砌
+值：  
+nowrap：不换行  
+wrap：侧轴正方向堆砌  
+wrap-reverse：侧轴负方向堆砌  
 
 #### align-content
 
-多行多列时富裕空间的管理
+多行多列时富裕空间的管理  
 
-align-content属性定义弹性容器的侧轴方向上有额外空间时，如何排列每一行/列。当弹性容器只有一行/列时无作用
-默认值：stretch拉伸 不可继承
-值：
-    flex-start：富裕空间在侧轴正方向上
-    flex-end：富裕空间在侧轴负方向上
-    center：富裕空间在两边
-    space-between：富裕空间在项目之间
-    space-around：富裕空间在项目两边
-    strech：拉伸
+align-content属性定义弹性容器的侧轴方向上有额外空间时，如何排列每一行/列。当弹性容器只有一行/列时无作用  
+默认值：stretch拉伸 不可继承  
+值：  
+    flex-start：富裕空间在侧轴正方向上  
+    flex-end：富裕空间在侧轴负方向上  
+    center：富裕空间在两边  
+    space-between：富裕空间在项目之间  
+    space-around：富裕空间在项目两边  
+    strech：拉伸  
 
-多行多列看align-content
-单行单列看align-items
+多行多列看align-content  
+单行单列看align-items  
 
 #### flex-flow
 
-flex-flow属性是”flex-direction“和”flex-wrap“的简写
+flex-flow属性是”flex-direction“和”flex-wrap“的简写  
 
-默认值：row nowrap 不可继承
+默认值：row nowrap 不可继承  
 
-控制主轴以及侧轴方向
+控制主轴以及侧轴方向  
 
 ### 项目新增
 
@@ -1558,17 +1556,17 @@ stretch: flex元素基于容器的宽高，按照自身 margin-box 的cross-size
 CSS 属性 flex-basis 指定了 flex 元素在主轴方向上的初始大小。如果不使用  box-sizing 改变盒模型的话，那么这个属性就决定了 flex 元素的内容盒（content-box）的尺寸。
 
 取值
-<'width'>
-width 值可以是 length; 该值也可以是一个相对于其父弹性盒容器主轴尺寸的百分数 。负值是不被允许的。默认为 auto。
+<'width'>  
+width 值可以是 length; 该值也可以是一个相对于其父弹性盒容器主轴尺寸的百分数 。负值是不被允许的。默认为 auto。  
 
-content
-基于 flex 的元素的内容自动调整大小。
+content  
+基于 flex 的元素的内容自动调整大小。  
 
 #### flex-shrink
 
-flex-shrink确定了flex元素的收缩规则，flex元素仅在默认宽度之和大于容器的时候才会发生收缩，其收缩大小的依据是flex-shrink的值
-默认值为1
-前提：flex-wrap:nowrap;只有一行/列
+flex-shrink确定了flex元素的收缩规则，flex元素仅在默认宽度之和大于容器的时候才会发生收缩，其收缩大小的依据是flex-shrink的值  
+默认值为1  
+前提：flex-wrap:nowrap;只有一行/列  
 
 #### flex简写属性
 
@@ -1576,92 +1574,103 @@ CSS属性 flex 规定了弹性元素如何伸长或缩短以适应flex容器中�
 
 flex 属性可以指定1个，2个或3个值。
 
-单值语法: 值必须为以下其中之一:
-一个无单位数(number): 它会被当作flex-grow的值。
-一个有效的宽度(width)值: 它会被当作 flex-basis的值。
-关键字none，auto或initial.
+单值语法: 值必须为以下其中之一:  
+一个无单位数(number): 它会被当作flex-grow的值。  
+一个有效的宽度(width)值: 它会被当作 flex-basis的值。  
+关键字none，auto或initial.  
 
-双值语法: 第一个值必须为一个无单位数，并且它会被当作 flex-grow 的值。第二个值必须为以下之一：
-一个无单位数：它会被当作 flex-shrink 的值。
-一个有效的宽度值: 它会被当作 flex-basis的值。
+双值语法: 第一个值必须为一个无单位数，并且它会被当作 flex-grow 的值。第二个值必须为以下之一：  
+一个无单位数：它会被当作 flex-shrink 的值。  
+一个有效的宽度值: 它会被当作 flex-basis的值。  
 
-三值语法:
-第一个值必须为一个无单位数，并且它会被当作 flex-grow 的值。
-第二个值必须为一个无单位数，并且它会被当作  flex-shrink 的值。
-第三个值必须为一个有效的宽度值， 并且它会被当作 flex-basis 的值。
+三值语法:  
+第一个值必须为一个无单位数，并且它会被当作 flex-grow 的值。  
+第二个值必须为一个无单位数，并且它会被当作  flex-shrink 的值。  
+第三个值必须为一个有效的宽度值， 并且它会被当作 flex-basis 的值。   
 
 ### flex经典布局（等比例布局）
 
 ```
 <!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>等比例布局</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            .box{
+                width: 400px;
+                height: 400px;
+                border: 1px solid;
+                margin: 100px auto;
 
-<head>
-	<meta charset="UTF-8">
-	<title></title>
-	<style>
-		* {
-			margin: auto;
-			padding: 0;
-		}
+                display: flex;
+         
+            }
+            .box .item{
+                height: 50px;
+                background-color: #abf;
+                text-align: center;
+                line-height: 50px;
 
-		#wrap {
-			width: 400px;
-			height: 400px;
-			margin: auto;
-			border: 1px solid;
-			display: flex;
-		}
-		.item {
-			height: 50px;
-			background-color: rgb(218, 26, 58);
-			text-align: center;
-			line-height: 50px;
-			flex: 1;
-			
-		}
+                /* flex-shrink: 1; */
+                /* 等比例分配富余空间给项目（宽度被内容撑开） */
+                    /* flex-grow: 1; */
+                /* 将一开始的宽度清零 */
+                /* 因此富裕空间为容器宽度 */
+                /* 同时flex-grow会将富裕空间等比例（均分）给所有项目 */
+                    /* flex-basis: 0; */
 
-	</style>
-</head>
-<body>
-	<div id="wrap">
-		<div class="item">1</div>
-		<div class="item">2</div>
-		<div class="item">3</div>
-		<div class="item">4</div>
-		<div class="item">5</div>
-	</div>
-</body>
-<script>
-</script>	
+                /* 以上简写 */
+                /* 相当于 flex-grow: 1; flex-shrink: 1; flex-basis: 0; */
+                flex: 1;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <div class="item">1</div>
+            <div class="item">222</div>
+            <div class="item">3333</div>
+            <div class="item">44444</div>
+            <div class="item">55</div>
+        </div>
+    </body>
 </html>
 ```
-## 响应式布局方案
+# 响应式布局方案
 
-### CSS3媒体查询
+## CSS3媒体查询
 
 CSS3的媒体查询是响应式布局的核心
 
-#### 媒体类型
+### 媒体类型
 
-all——所有媒体（默认值）
-screen——彩色屏幕
-print——打印预览
-projection——手持设备
-tv——电视
-braille——盲文触觉设备
-embossed——盲文打印机
-speech——“听觉”类似的媒体 设备
-tty——不适用像素的设备
+all——所有媒体（默认值）  
+screen——彩色屏幕  
+print——打印预览  
+projection——手持设备  
+tv——电视  
+braille——盲文触觉设备  
+embossed——盲文打印机  
+speech——“听觉”类似的媒体 设备  
+tty——不适用像素的设备  
 
-#### 媒体属性
+### 媒体属性
 
-##### width
+#### width
 
 width：浏览器窗口的尺寸（min max）
 
-min-width:800px——浏览器窗口>=800px才起作用
-max-width:800px——浏览器窗口<=800px才起作用
+min-width:800px  
+浏览器窗口>=800px才起作用  
+
+max-width:800px  
+浏览器窗口<=800px才起作用  
 ```
 @media screen and (min-width:800px){
     选择器:{
@@ -1671,23 +1680,23 @@ max-width:800px——浏览器窗口<=800px才起作用
 }
 ```
 
-##### device-width
+#### device-width
 
 device-width：设备独立像素 PC端看分辨率 移动端具体看机器的参数（min max）
 
-##### device-pixel-ratio
+#### device-pixel-ratio
 
-device-pixel-ratio（注意：必须加-webkit-前缀）
+device-pixel-ratio（注意：必须加-webkit-前缀）  
 像素比，PC端为1 移动端具体看机器参数（min max）
 
-##### orientation
+#### orientation
 
-orientation：portrait竖屏 landscape横屏
-注意：不用带引号
+orientation：portrait竖屏 landscape横屏  
+注意：不用带引号  
 
-#### 操作符，关键字（only,and,(,代表or),not）
+### 操作符，关键字（only|and|,代表or|not）
 
-##### and
+#### and
 
 and：and代表与的意思，一般用and链接媒体类型和媒体属性
 
@@ -1699,12 +1708,10 @@ and：and代表与的意思，一般用and链接媒体类型和媒体属性
 }
 ```
 
-##### only
+#### only
 
-only：和浏览器的兼容性有关
-老版本的浏览器只支持媒体类型，不支持媒体属性的查询
-用关键字only可使老版本浏览器支持对应的媒体属性查询
-
+only：和浏览器的兼容性有关  
+老版本的浏览器只支持媒体类型，不支持媒体属性的查询  
 ```
 在老版本浏览器眼里
 @media screen and (min-width:800px) and (orientation:landscape) {
@@ -1727,7 +1734,7 @@ only：和浏览器的兼容性有关
 
 ```
 
-##### ,
+#### ,
 
 ```
  , 代表或的意思
@@ -1739,28 +1746,18 @@ only：和浏览器的兼容性有关
 代表screen and (min-width:800px) 或 (orientation:landscape)
 ```
 
-##### not
+#### not
 
-## 多列布局（分栏布局）
+---------------------
 
-### 栏目宽度（栏目之间有间隔）
-
+# 多列布局（分栏布局）
+## 栏目宽度（栏目之间有间隔）
 column-width指定每一栏的宽度（这是多列布局的第一种分法）
-
-### 栏目列数（栏目之间有间隔）
-
+## 栏目列数（栏目之间有间隔）
 column-count指定栏目列数（这是多列布局的第二种分法）
-
-### 栏目距离
-
+## 栏目距离
 column-gap
-
-### 栏目分割线
-
+## 栏目分割线
 column-rule 类似于border
 
-
-
-
-
-
+# 规范
