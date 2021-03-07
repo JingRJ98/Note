@@ -111,7 +111,7 @@ text-shadow: black 10px 10px 5px, red 20px 20px 5px;
 ```
 
 ### 文字描边
-只有webkit才支持：-webkit-text-stroke（准确来说不能算是CSS3的东西，但需要知道）  
+只有webkit才支持：-webkit-text-stroke（准确来说不能算是CSS3的东西 但需要知道）  
 -webkit-text-stroke CSS属性为文本字符指定了宽 和 颜色   
 它是-webkit-text-stroke-width 和-webkit-text-stroke-color属性的缩写.  
 ```
