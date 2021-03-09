@@ -94,46 +94,116 @@ a = null // 释放数组占用的内存
 ```
 
 # JS引擎如何管理内存
-
 ## 内存的生命周期
-
-1.分配内存，得到使用权  
-2.存储数据，可以进行反复操作  
-3.释放内存空间  
+1.分配内存，得到使用权    
+2.存储数据，可以进行反复操作    
+3.释放内存空间    
 
 ## 释放内存
 
-1.局部变量：函数执行完自动释放
-2.对象：成为垃圾对象>垃圾回收器回收
+1.局部变量：函数执行完自动释放     
+2.对象：成为垃圾对象>垃圾回收器回收  
+
+--------------------
 
 # 对象
-
+方法是一种特殊的属性  
+属性值是函数的属性是方法  
 ## 什么时候必须使用["属性名"]的方式读取或修改对象属性？
 
-1.属性名包含特殊字符：- 空格
-2.属性名为变量
+1、属性名包含特殊字符：- 空格    
+```
+        var p = {}
+        // p.a-b = 'aaa';// error
+        p['a-b'] = 'aaa';
+        console.log(p['a-b']);// aaa
+```
+2、属性名为变量  
+```
+        var p ={}
+        var a1 = 'myAge';
+        var value = 18;
+        // p.a1 = value;
+        // console.log(p);
+        // 输出a1: 18 而不是myAge: 18
+        // a1应该是保存属性名的变量
+
+        p[a1] = value;
+        console.log(p);
+        // 输出myAge: 18
+```
 
 # 函数
 
-函数是n条语句的封装体，方便复用
+函数是n条语句的封装体，方便复用  
+只有函数是能够执行的，其他数据不能被执行  
+提高代码复用，便于阅读交流  
+```
+        fun1();
+        // fun2(); // error
+
+        // 函数声明方式
+        // 可以提前使用
+        function fun1() {
+            console.log('你好');
+        }
+        fun1();
+
+        // 表达式方式定义函数
+        // 没法提前使用
+        var fun2 = function(){
+            console.log('表达式方式');
+        }
+        fun2();
+```
+
+```
+        var obj1 = {}
+        function fun3(){
+            console.log('你妈');
+        }
+        // 可以让一个函数作为指定任意对象的方法进行调用
+        fun3.call(obj1);// 通过函数.call(对象) 让函数称为对象的方法 再调用函数
+
+```
 
 ## 回调函数
 
-DOM事件回调函数
-定时器回调函数
-网络请求回调函数
-生命周期回调函数
+DOM事件回调函数     
+```
+        var btn = document.querySelector('button');
+        btn.addEventListener('click',function(){
+            // 动态获取文本
+            alert(this.innerHTML);
+        })
+```
+
+定时器回调函数   
+```
+        setTimeout(function(){
+            alert(123456);
+        },2000)
+```
+
+网络请求回调函数   
+后面讲
+
+生命周期回调函数    
+后面讲
 
 ## IIFE
-
+immediately invoked function expression  
 立即执行函数，匿名函数自调用
-
-作用：隐藏实现，不污染全局作用域，JS模块化
+```
+        (function (){
+            var a= 3;
+            console.log(a+2);
+        })();
+```
+作用：隐藏实现，不污染全局命名空间，编写JS模块
 
 ## this
-
-解析器在调用函数每次都会向函数内部传递进一个隐含的参数,这个隐含的参数就是this，this指向的是一个对象
-
+解析器在调用函数每次都会向函数内部传递进一个隐含的参数,这个隐含的参数就是this，this指向的是一个对象  
 这个对象我们称为函数执行的 上下文对象，根据函数的调用方式的不同，this会指向不同的对象
 
 1.以函数的形式调用时，this永远都是window
@@ -146,31 +216,81 @@ DOM事件回调函数
 
 5.在事件的响应函数中，响应函数是给谁绑定的this就是谁
 
+-------------------
+# 函数高级 
+
 # 原型与原型链（实例对象的隐式原型指向其构造函数的显式原型）
+
+--------------
+
+没听懂
+
+--------------
 
 ## 函数的prototype属性
 
-每个函数都有prototype属性，它默认指向一个Object实例对象（但Object不满足），即 原型对象
-而 原型对象 中有一个属性为constructor（构造函数），它指向函数对象
+每个函数都有prototype属性，它默认指向一个Object实例对象（但Object不满足），即原型对象    
+而` 原型对象 `中有一个属性为constructor（构造函数），它指向函数对象  
 
-给 原型对象 添加属性（一般都是方法）
-作用：函数的所有实例对象自动拥有原型中的属性（方法）
+给 原型对象 添加属性（一般都是方法）    
+作用：函数的所有实例对象自动拥有原型中的属性（方法）  
+```
+        function fun1(){
+
+        }
+        // 每个函数都有prototype属性
+        // 函数名.prototype 是一个对象
+
+        // js可以给对象动态添加属性
+        // 添加一个方法
+        fun1.prototype.test = function(){
+            console.log('test()');
+        }
+        console.log(fun1.prototype);
+```
 
 ## 显式原型与隐式原型
 
-每个函数function都有一个prototype属性，即显示原型，在定义函数时自动添加
+每个函数function都有一个prototype属性，即显示原型，默认指向空Object(实例对象).在定义函数时自动添加
 
 每个实例对象都有一个__proto__属性，即隐式原型，在创建对象时自动添加，隐式原型值为其对应构造函数的显示原型的值
+```
+        function Fn(){
+
+        }
+        console.log(Fn.prototype);
+        var fn = new Fn();
+        console.log(fn.__proto__);
+        console.log(Fn.prototype === fn.__proto__);// true
+
+```
+```
+        // 创建函数对象
+        // Fn是变量名，保存的是对象的地址值
+        function Fn(){
+            this.test1 = function(){
+                console.log('test1');
+            }
+        }
+        console.log(Fn.prototype);
+        // 每个函数function都有一个prototype属性，即显示原型，默认指向空Object
+        // 给这个空对象添加一个方法test2
+        Fn.prototype.test2 = function(){
+            console.log('test2');
+        }
+        var fn = new Fn() 
+```
+构造函数对象显式原型的值等于实例对象隐式原型的值
 
 ## 原型链（隐式原型链）
 
-访问一个实例对象的属性时
-1.先在实例对象自身的属性中查找，找到返回
-2.否则，沿着实例对象的__proto__向上查找，找到返回
-3.否则，返回undefined
-注意：
-1.所有函数都是Function(包括Function本身)的实例
-2.Object的原型对象是原型链的尽头
+访问一个实例对象的属性时  
+1.先在实例对象自身的属性中查找，找到返回  
+2.否则，沿着实例对象的__proto__向上查找，找到返回  
+3.否则，返回undefined  
+注意：  
+1.所有函数都是Function(包括Function本身)的实例  
+2.Object的原型对象是原型链的尽头  
 
 ## 原型继承
 
@@ -181,47 +301,88 @@ DOM事件回调函数
 A instanceof B 
 如果B函数的显式原型对象在A对象的隐式原型链上，则返回true，否则返回false
 
+## 原型题目
+1
+```
+        // 创建构造函数
+        var A = function(){}
+        // 向实例对象中添加属性n 赋值 1
+        A.prototype.n = 1;
+
+        // 创建实例对象
+        var b = new A();
+        A.prototype = {
+            n:2,
+            m:3
+        }
+        var c = new A();
+        console.log(b.n,b.m,c.n,c.m);
+        // 1 undefined 2 3
+
+```
+
+2
+```
+        // 定义函数
+        var F = function(){}
+        // 给Object原型添加a方法
+        Object.prototype.a = function(){
+            console.log('a()');
+
+        }
+         // 给Function原型添加b方法
+        Function.prototype.b = function(){
+            console.log('b()');
+        }
+        var f = new F();
+        f.a() // a()
+        f.b()// error
+        F.a()// a()
+        F.b()// b()
+```
+
 # 变量声明提升
 
 var 提前申明，但不赋值，执行到才赋值，执行之前访问为undefined
 
 # 函数申明提升
 
-function 提前申明，可直接调用
+function 提前申明，可直接调用  
+函数提升必须使用声明的方式
+` function fun(){} `
 
 # 全局执行上下文
 
 1.在执行全局代码前将window确定为全局执行上下文
 
-2.对全局数据进行预解析
-    var 定义的全局变量为undefined，添加为window的属性
-    function声明的全局函数赋值，添加为window的方法
-    this赋值为window
+2.对全局数据进行预解析    
+    var 定义的全局变量为undefined，添加为window的属性   
+    function声明的全局函数赋值，添加为window的方法   
+    this赋值为window   
     
-3.开始执行全局代码
-
-
+3.开始执行全局代码  
 
 # 函数执行上下文
 
 1.在调用函数，准备执行函数体之前，创建对应的函数执行上下文对象
 
-2.对局部数据进行预解析
-    形参变量→赋值（实参）→添加为执行上下文的属性
-    arguments→赋值（参数列表）→添加为执行上下文的属性
-    var定义的局部变量→赋值undefined，添加为执行上下文的属性
-    function声明的函数→赋值，添加为执行上下文的方法
-    this→赋值
+2.对局部数据进行预解析  
+    形参变量→赋值（实参）→添加为执行上下文的属性  
+    arguments→赋值（所有参数列表 伪数组）→添加为执行上下文的属性   
+    var定义的局部变量→赋值undefined，添加为执行上下文的属性   
+    function声明的函数→赋值，添加为执行上下文的方法   
+    this→赋值  
 
 3.开始执行函数代码
 
 ```
-var c = 1
-function c(c){
-    console.log(c)
-    var c = 2
-}
-c(3)
+        var c = 1;
+        function C(c) {
+            console.log(c);// 输出传递的实参 3
+            var c = 2;// 声明提前 值为undefined
+        }
+        C(3);
+        // 3
 ```
 
 # 执行上下文栈
