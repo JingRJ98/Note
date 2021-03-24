@@ -229,7 +229,7 @@ console.log(str);
 
 简化的对象写法
 
-省略同名的属性与属性值    
+省略同名的属性与属性值      
 省略方法的function   
 
 例如：
@@ -259,14 +259,14 @@ let point = { //同名属性与属性值省略不写
 函数体有多个语句，需要用{}包围，若有需要返回的内容，需要手动返回
 
 3.使用场景:  
-多用来定义回调函数  
+多用来定义回调函数    
 
-4.箭头函数的特点
-    箭头函数没有自己的this，箭头函数的this不是调用的时候决定的，而是在定义的时候处在的对象就是它的this
-    扩展理解：箭头函数的this看外层是否有函数
-    如果有，外层函数的this就是内部箭头函数的this
-    如果没有，则this是window
-    无法通过call/apply/bind改变this
+4.箭头函数的特点  
+    箭头函数没有自己的this，箭头函数的this不是调用的时候决定的，而是在定义的时候处在的对象就是它的this  
+    扩展理解：箭头函数的this看外层是否有函数  
+    如果有，外层函数的this就是内部箭头函数的this  
+    如果没有，则this是window  
+    无法通过call/apply/bind改变this  
 
 ## 三点运算符
 
@@ -309,25 +309,29 @@ Promise对象：代表了未来某个将要发生的事件（通常是一个异�
 ### 创建Promise对象
 
 ```
-//promise承诺 resolve决定要做的事 reject拒绝 pending在等待...之际 fulfilled实现，满足 rejected被拒绝
-let promise = new Promise((resolve, reject) => {
-    //同步任务初始化promise状态为pending
-    //执行异步操作
-    if(!err) {
-        //修改promise状态为fulfilled
-        resolve(data) 
-    } else {
-        //修改promise状态为rejected
-        reject(errMsg)
-    }
-})
-//调用promise的then()
-promise
-.then((data) => {
-    //成功的回调
-}, (errMsg) => {
-    //失败的回调
-})
+        let promise = new Promise((resolve,reject) =>{
+            // 初始化promise状态 pending 初始化
+            console.log(1);
+            // 执行异步操作 通常是发送ajax请求 开启定时器
+            setTimeout(()=>{
+                console.log(3);
+                // 根据异步任务的返回结果 修改promise的状态
+                // 异步任务执行成功
+                resolve('hhhhhhh');// 修改promise的状态为成功状态
+
+                // 异步任务执行失败
+                // reject('555');// 修改promise的状态为失败状态
+            },2000);
+        })
+        console.log(2);
+
+        promise
+        // then里面两个形参传递的是上面resolve()/reject()返回的数据
+            .then((a) => {// 成功的调用
+                console.log(a,"成功了！！！");
+            },(error) =>{// 失败的调用
+                console.log(error,"失败了。。。");
+            })
 ```
 ### 应用
 
@@ -352,110 +356,130 @@ ES5中对象的属性名都是字符串，容易造成重名，污染环境，ES
 1.调用Symbol函数得到symbol的值
 
 ```
-let symbol = Symbol()
-let obj = {}
-obj[symbol] = "hello"
+let symbol = Symbol();// 不是构造函数 不需要new
+console.log(symbol);
+let obj = {
+    name: "jack",
+    age: 18
+}
+obj[symbol] = "hello";// 属性选择器
+console.log(obj);
 ```
 
-2.传参标识
+2.传参标识（唯一）
 
 ```
-let symbol1 = Symbol("one")
-let symbol2 = Symbol("two")
+let symbol2 = Symbol('aaa2');// 可以给不同的symbol传入唯一标识的参数
+let symbol3 = Symbol('aaa3');
+console.log(symbol2 == symbol3);// false
 ```
 
-3.内置Symbol值
-除了定义自己使用的Symbol值以外，ES6还提供了11个内置的Symbol值，指向语言内部的使用方法
+3.内置Symbol值  
+除了定义自己使用的Symbol值以外，ES6还提供了11个内置的Symbol值，指向语言内部的使用方法  
 
 ## iterator接口机制
 
 概念：iterator是一种接口机制，为各种不同的数据结构提供统一的访问机制
 
-作用：
+作用：  
 1.为各种数据结构，提供一个统一的，简便的访问接口
 
 2.使得数据结构的成员能够按某种次序排列
 
 3.ES6创造了一种新的遍历命令for of循环，iterator接口主要供for of消费
 
-工作原理：
-    创建一个指针对象（遍历器对象），指向数据结构的起始位置
-     第一次调用next方法，指针自动指向数据结构的下一个成员
-     接下来不断调用next方法，指针会一直往后移动，直到指向最后一个成员
-     每调用next方法返回的是一个包含value和done的对象（value：当前成员的值，done：布尔值）
-     value表示当前成员的值，done对应的布尔值表示当前的数据的结构是否遍历结束
-     当遍历结束的时候返回的value值是undefined，done值为true
+工作原理：  
+    创建一个指针对象（遍历器对象），指向数据结构的起始位置  
+     第一次调用next方法，指针自动指向数据结构的下一个成员   
+     接下来不断调用next方法，指针会一直往后移动，直到指向最后一个成员  
+     每调用next方法返回的是一个包含value和done的对象（value：当前成员的值，done：布尔值）   
+     value表示当前成员的值，done对应的布尔值表示当前的数据的结构是否遍历结束   
+     当遍历结束的时候返回的value值是undefined，done值为true   
 
 ```
-let index = 0
-
-function myIterater(arr) {
-    return {
-        next: () => {
-            return index < arr.length ? {
-                value: arr[index++],
-                done: false
-            } : {
-                value: arr[index++],
-                done: true
+        function myIterator(arr){
+            let index = 0;// 记录指针的位置
+            return {
+                // 函数返回值是遍历器对象
+                next(){// 简写的对象方法
+                    // 判断句
+                    // index小于数据长度时继续向后遍历
+                    // 一旦到数据末尾，返回str，修改done
+                    return index<arr.length?{
+                        value: arr[index++],// arr[index++]下标先使用再加加
+                        done: false
+                    }:{
+                        value: '遍历完成！',
+                        done: true
+                    }
+                }
             }
         }
-    }
-}
-
-let arr = [0, 1, 2, 3, 4]
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-console.log(myIterater(arr).next());
-```
-
-
-原生具备iterator接口的数据（可用for of遍历）
-     数组，字符串，arguments，set容器，map容器
+        // 准备一组数据测试
+        let arr = [1,2,3,4,5];
+        let iteratorObj = myIterator(arr);
+        console.log(iteratorObj.next());
+        console.log(iteratorObj.next());
+        console.log(iteratorObj.next());
+        console.log(iteratorObj.next());
+        console.log(iteratorObj.next());
+        console.log(iteratorObj.next());// 此时返回undefined
+        console.log(iteratorObj.next());// 此时返回undefined
 
 ```
-let arr = [1, 2, 3, 4]
-for (const item of arr) {
-    console.log(item)
-}
+
+
+原生具备iterator接口的数据（可用for of遍历）  
+     数组，字符串，arguments，set容器，map容器  
+     iterator没有部署在obj上  
+
+```
+        let arr = [1, 2, 3, 4]
+        for (const item of arr) {
+            console.log(item)
+        }
+
+        let str = "abcdef";
+        for(let i of str){
+            console.log(i);
+        }
 ```
 
 ## Generator函数
 
-概念：
-可暂停函数，惰性求值函数
-1.ES6提供的解决异步编程的方案之一
-2.Generator函数是一个状态机，内部封装了不同的数据
-3.用来生成遍历器对象
-4.可暂停函数（惰性求值），yield可暂停，next方法可启动，每次返回的是yield后的表达式结果
+概念：  
+可暂停函数，惰性求值函数     
+1.ES6提供的解决异步编程的方案之一       
+2.Generator函数是一个状态机，内部封装了不同的数据   
+3.用来生成遍历器对象    
+4.可暂停函数（惰性求值），yield可暂停，next方法可启动，每次返回的是yield后的表达式结果    
 
-特点：
-1.function与函数名之间有一个*号
-2.内部用yield表达式来定义不同的状态
+特点：   
+1.function与函数名之间有一个*号   
+2.内部用yield表达式来定义不同的状态    
 
 ```
-    function* myGenerator() {
-        console.log("start")
-        yield "one"
-        yield "two"
-        yield "three"
-        let test = yield "four" //yield默认返回值是undefined
-        console.log(test)
-        return "finished"
-    }
-    let MG = myGenerator() //返回指针对象
+        function* myGenerator(){
+            console.log('start');
+            let result = yield "hello!";// 暂停
 
-    console.log(MG.next()); // {value:"one", done:false}
-    console.log(MG.next()); // {value:"two", done:false}
-    console.log(MG.next()); // {value:"three", done:false}
-    console.log(MG.next()); // {value:"four", done:false}
-    console.log(MG.next("我传入的值"))// {value:"finished", done:true}
+            console.log(result);// 如果next()不传参，输出undefined 否则输出参数
+            yield "1";// 每个yield通过.next()方法执行完都会暂停一次
+
+            console.log(12333);
+            yield "2";// 暂停
+
+            return 'over'
+        }
+        // myGenerator();// 函数内部并没有执行
+
+        let MG = myGenerator();
+        // MG.next();// 指针对象调用next方法
+        console.log(MG.next());// {value: "hello!", done: false}
+        console.log(MG.next('12333333'));// {value: "1", done: false}
+        console.log(MG.next());// {value: "2", done: false}
+        console.log(MG.next());// {value: "return的值", done: true}
+
 ```
 
 对象Symbol.iterator 与Generator相结合
@@ -478,230 +502,341 @@ for (let i of obj) {
 
 概念：真正意义上解决异步回调问题，同步流程表达异步操作
 
-本质：Generator的语法糖
+本质：Generator的语法糖（语法糖：在原有的语法基础上更加完善）
 
-语法：
-    async function foo () {
-    await 异步操作
-    await 异步操作
-    }
+语法：  
+    async function foo () {  
+    await 异步操作  
+    await 异步操作  
+    }  
 
-特点：
-1.不需要像Generator去调用next方法
-2.返回的总是Promise对象，可以用then方法进行下一波操作
-3.async取代Generator函数的*号，await取代Generator的yield
-4.语义上更明确，使用简单
+特点：  
+1.不需要像Generator去调用next方法   
+2.返回的总是Promise对象，可以用then方法进行下一波操作   
+3.async取代Generator函数的*号，await取代Generator的yield   
+4.语义上更明确，使用简单   
+```
+       // async函数
+
+        async function fun(){
+            return new Promise (resolve => {// 箭头函数一个参数可以省略括号
+                setTimeout(() => {
+                    resolve();
+                },2000)
+            })
+        }
+
+        async function fun1(){
+            console.log('start',new Date().toTimeString());
+            await fun();
+            console.log('over',new Date().toTimeString());
+        }
+
+        fun1();
+
+
+        function fun2(){
+            return "xxxxx";
+        }
+        async function fun3(){
+            // let result = await Promise.reject(123);
+            // console.log(result);
+            // 输出报错
+
+            let result1  = await Promise.resolve(123);
+            console.log(result1);
+            // 输出123 
+        }
+        fun3();
+```
 
 ## class
 
-1.通过class定义类/实现类的继承
-2.在类中通过constructor定义构造方法
-3.通过new创建类的实例
-4.通过extends来实现类的继承
-5.通过super调用父类的构造方法
-6.重写从父类中继承的一般方法
+1.通过class定义类/实现类的继承     
+2.在类中通过constructor定义构造方法  
+3.通过new创建类的实例  
+4.通过extends来实现类的继承  
+5.通过super调用父类的构造方法   
+6.重写从父类中继承的一般方法    
 
 ```
-class Person {
-    constructor(name, age) {
-        this.name = name
-        this.age = age
-    }
-    showID(){
-        console.log(1)
-    }
-}
+        // function Person(name,age){
+        //     this.name = name;
+        //     this.age = age;
+        // }
 
-class Student extends Person {
-    constructor(name, age, sex) {
-        super(name, age)
-        this.sex = sex
-    }
-    showID(){
-        console.log(2)
-    }
-}
-let student = new Student("小明", 11, "男")
-console.log(student);
-student.showID()
+        // let person = new Person('tom',22);
+        // console.log(person);
+
+
+        class Person {
+            // 类的构造方法
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+            // 类的一般方法
+            showName() {
+                console.log('父类',this.name);
+            }
+        }
+        let person = new Person('tom', 22);
+        console.log(person);
+        person.showName();
+
+        // 继承
+        class StarPerson extends Person {
+            // 当子类继承父类时 必须使用super()声明
+            constructor(name, age, salary) {
+                super(name, age);// 声明调用父类的构造方法
+                this.salary = salary;
+            }
+            showName() {
+                console.log("子类",this.name,this.age);
+            }
+        }
+        let ppp = new StarPerson('jack', 18, 10000);
+        console.log(ppp);
+        // 如果super()声明不传父类的参数 则输出
+        // StarPerson {name: undefined, age: undefined, salary: 10000}
+        ppp.showName();//子类 jack 18
+        // 子类把父类的方法重写了
+        
 ```
-## String扩展
+# String扩展
 
-### includes(str)
+## includes(str)
 
 判断是否包含指定的字符串
 
-### startsWith(str)
+```
+        let str = 'asdfgjhgkhlk';
+        console.log(str.includes('asd'));// true
+```
+
+## startsWith(str)
 
 判断是否以指定字符串开头
 
-### endsWith(str)
+## endsWith(str)
 
 判断是否以指定字符串结尾
 
-### repeat(count)
+## repeat(count)
 
-重复指定次数
+指定目标字符串里面出现字母的次数
 
-## Number扩展
+# Number扩展
 
-### Number.isFinite(i)
+## Number.isFinite(i)
 
 判断是否有限大的数
 
-### Number.isNaN(i)
+## Number.isNaN(i)
 
 判断是否是NaN
 
-### Number.isInteger(i)
+## Number.isInteger(i)
 
 判断是否是整数
 
-### Number.parseInt(str)
-
+## Number.parseInt(str)
+不是数字返回NaN  
 将字符串转换为队形数值
 
-### Math.trunc(i)
+## Math.trunc(i)
 
 直接去除小数部分
 
-## Array扩展
+# Array扩展
 
-### Array.from(v)
+## Array.from(v)
 
 将伪数组对象或可遍历对象转换为真数组
 
-### Array.of(v1, v2, v3)
+## Array.of(v1, v2, v3)
 
 将一系列值转换成数组
 
-### find(function(value, index, arr) {return true})
+## find(function(value, index, arr) {return true})
 
 找出第一个满足条件返回true的元素
 
-### findIndex(function(value, index, arr) {return true})
+## findIndex(function(value, index, arr) {return true})
 
 找出第一个满足条件返回true的元素下标
 
-## Object扩展
+# Object扩展
 
-### Object.is(v1, v2)
+## Object.is(v1, v2)
 
 判断两个数据是否相等,以字符串判断
+```
+        console.log(0 == -0);// true
+        console.log(Object.is(0,-0));// false
+        
+        console.log(NaN == NaN);// false
+        console.log(Object.is(NaN,NaN));// true
+```
 
-### Object.assign(target, sourse1, sourse2...)
+## Object.assign(target, sourse1, sourse2...)
 
 将源对象的属性复制到目标身上
+```
+        let obj = {
+            gender: '男'
+        }
+        let obj1 = {
+            name: 'tom',
+            age: 19
+        }
+        Object.assign(obj,obj1);
+        console.log(obj);
+        // {gender: "男", name: "tom", age: 19}
+```
 
-### 直接操作__proto__属性
+## 直接操作__proto__属性
 
-## 深度克隆
+# 深度克隆
 
-### 浅拷贝（对象/数组）
+## 浅拷贝（对象/数组）
+基本数据类型拷贝后直接生成新数据，修改拷贝后的数据不会影响原数据  
 
 特点：修改拷贝后的数据会影响原数据，使得原数据不安全
 
-### 深拷贝（深度克隆）
+## 深拷贝（深度克隆）
 
 特点：拷贝的时候生成新数据，修改拷贝以后的数据不会影响原数据
 
-### 如何实现深拷贝
+## 如何实现深拷贝
 
 1.判断数据类型
 
-Object.prototype.toString.call(target).slice(8, -1)
+Object.prototype.toString.call(target).slice(8, -1)  
+.call() 指定this 并立即调用
 
 2.遍历对象/数组
 
-for in对象返回属性名，数组返回下标
+for in对象返回属性名，数组返回下标  
 
 ```
-//对象/数组深拷贝
-
-//判断数据类型
-function checkedType(target) {
-    return Object.prototype.toString.call(target).slice(8, -1)
-}
-
-//深拷贝
-function clone(target) {
-    let result
-    if (checkedType(target) === "Object") {
-        result = {}
-    } else if (checkedType(target) === "Array") {
-        result = []
-    } else {
-        return target
-    }
-
-    //遍历对象/数组
-    for (let i in target) {
-        let value = target[i]
-        //判断value是否为对象/数组
-        if (checkedType(value) === "Object" || checkedType(value) === "Array") {
-            //若是则继续深拷贝
-            result[i] = clone(value)
-        } else {
-            result[i] = value
+// 判断数据类型的函数
+        function checkType(target){
+            return Object.prototype.toString.call(target).slice(8,-1);
         }
-    }
 
-    return result
-}
+        // console.log(checkType(obj3));
 
-let a = [{name:"a"}, 2, 3, 4, 5, 6]
-let b = clone(a)
-b[0].name = "b"
-console.log(a)
-console.log(b);
+        function clone(target) {
+            let result;
+            let targetType = checkType(target);
+            if(targetType === 'Object'){
+                result = {};
+
+            }
+            else if(targetType === 'Array'){
+                result = [];
+            }
+            else{
+                return target;
+            }
+
+
+            // 遍历目标
+            for(let i in target){
+                let value = target[i];
+                // target若为数组，则根据下标赋值给value
+                // target若为对象，target[i]代表对象中的i属性对应的属性值，赋值给value
+
+                // 判断目标结构的每一个值是否存在对象/数组（存在嵌套）
+                // [1,2,3,[1,2,3,[1,2]]]
+                if(checkType(value) === 'Object' || checkType(value) === 'Array'){
+                    result[i] = clone(value);
+                }
+                else{
+                    result[i] = value;
+                }
+            }
+            return result;
+        }
+        let arr000 = [1,2,[11,22,[111.222]]];
+        let arr001 = clone(arr000);
+        console.log(arr001);
+        arr001[2] = {name: 'jack',age: 11};
+        console.log(arr000,arr001);
+        // [1, 2, Array(3)]
+        // [1, 2, {…}]
+
 
 ```
 
-## Set容器
+# Set容器
 
-Set容器：无序不可重复的多个value的集合体
+Set容器：无序`不可重复`的多个value的集合体
 ```
 let set =new Set([value])
 ```
 
-### Set(array)
+## .add(value)
 
-### add(value)
+## .delete(value)
 
-### delete(value)
+## .has(value)、
 
-### has(value)
+## .clear()
 
-### clear()
+## .size
 
-### size
-
-## Map容器
-
-Map容器：无序的不重复的多个key-value集合体
+## 应用
+数组去重
 ```
-let map = new Map([[key,value]])
+        let arr = [1,2,2,3,3,3,4,5,6];
+        let arr1 = arr;
+        arr = [];// 清空arr
+        let set = new Set(arr1); // 使用set方法去重
+        for(let i of set){
+            // for of 遍历
+            arr.push(i);
+        }
+        console.log(arr);
 ```
-### Map(array)
 
-### set(key, value)
+# Map容器
 
-### get(key)
+Map容器：无序的`不重复`的多个key-value集合体
+```
+        let map = new Map([[key,value]])
 
-### delete(key)
+        let map = new Map([['name','tom'],['age',18]]);
+        console.log(map);
+        // Map(2) {"name" => "tom", "age" => 18}
+```
 
-### has(key)
+## set(key, value)
 
-### clear()
+## get(key)
 
-### size
+## delete(key)
+
+## has(key)
+
+## clear()
+
+## size
 
 # ES7
 2016发布
 
 ## **指数运算符
 
+console.log(3 ** 3);// 27
+
 ## Array.prototype.includes(value)
+判断数组中是否含有某个元素
+```
+        let arr111 = [1,2,3,'abc'];
+        console.log(arr111.includes('a'));// false
+```
 
 
 
