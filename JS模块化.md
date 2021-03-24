@@ -29,7 +29,6 @@ require(xxx)：第三方模块：xxx为模块名
 ### 服务器端实现：Node.js
 
 ### 浏览器端实现：Browserify
-
 browserify js/src/app.js -o js/dist/bundle.js
 
 # AMD(asynchronous module definition异步模块)
