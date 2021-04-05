@@ -150,17 +150,17 @@ React提供了一些API来创建一种“特别”的一般js对象
 ## 表达式和代码
 一个表达式可以产生一个值，可以放在需要的地方  
 ```
-										(1). a
-										(2). a+b
-										(3). demo(1)
-										(4). arr.map() 数组方法
-										(5). function test () {}
+						(1). a
+						(2). a+b
+						(3). demo(1)
+						(4). arr.map() 数组方法
+						(5). function test () {}
 ```
 语句（代码）
 ```
-										(1).if(){}
-										(2).for(){}
-										(3).switch(){case:xxxx}
+						(1).if(){}
+						(2).for(){}
+						(3).switch(){case:xxxx}
 ```
 ### jsx练习
 ```
@@ -222,9 +222,32 @@ babel开启严格模式后 禁止自定义函数指向window
 ### 类式组件  
 
 ```
-
+	<script type="text/babel">
+		//1.创建类式组件
+		// React.Component是React内置类
+		class MyComponent extends React.Component {
+			render(){
+				//render是放在哪里的？—— MyComponent的原型对象上，供实例使用。
+				//render中的this是谁？—— MyComponent的实例对象 <=> MyComponent组件实例对象。
+				console.log('render中的this:',this);
+				return <h2>我是用类定义的组件(适用于【复杂组件】的定义)</h2>
+			}
+		}
+		//2.渲染组件到页面
+		// 组件标签需要闭合
+		ReactDOM.render(<MyComponent/>,document.getElementById('test'))  
+		/* 
+			执行了ReactDOM.render(<MyComponent/>.......之后，发生了什么？
+					1.React解析组件标签，找到了MyComponent组件。
+					2.发现组件是使用类定义的，随后new出来该类的实例，并通过该实例调用到原型上的render方法。
+					3.将render返回的虚拟DOM转为真实DOM，随后呈现在页面中。
+		*/
+	</script>
 ```
-#### 类的复习
+
+----------------------------------
+
+# 类的复习
 			总结：  
 				1.类中的构造器不是必须要写的，要对实例进行一些初始化的操作，如添加指定属性时才写。   
 				2.如果A类继承了B类，且A类中写了构造器，那么A类构造器中的super是必须要调用的。   
@@ -293,19 +316,110 @@ babel开启严格模式后 禁止自定义函数指向window
 </body>
 </html>
 ```
+
+----------------------------
+
 ## 注意
  
-1.组件名必须首字母大写  
-2.虚拟DOM元素只能有一个根元素  
-3.虚拟DOM元素必须有结束标签
+1.组件名必须首字母大写    
+2.虚拟DOM元素只能有一个根元素    
+3.虚拟DOM元素必须有结束标签  
 
 ## render()渲染组件标签的基本流程
 
-1.React内部会创建组件实例对象
-2.得到包含的虚拟DOM并解析为真实DOM
-3.插入到指定的页面元素内部
+1.React解析组件标签，找到了MyComponent组件。   
+2.发现组件是使用类定义的，随后new出来该类的实例，并通过该实例调用到原型上的render方法。  
+3.将render返回的虚拟DOM转为真实DOM，随后呈现在页面中。  
 
-## 组件三大属性
+---------------------------------------
+
+# 原生js事件绑定的复习
+三种绑定方式  
+
+第一种  
+DOM2级  
+Element.addEventListener(('click', () => {}, false))  
+
+参数：
+
+1.事件的字符串，不要加on
+
+2.回调函数，当事件触发时该函数会被调用
+
+3.是否在捕获阶段触发事件，需要一个布尔值，默认都传false
+
+优点：可以为一个元素的一个事件绑定多个回调函数，多个回调函数按绑定顺序执行
+
+缺点：兼容性不好，不支持IE8及以下
+
+解绑：removeEventListener，三个参数必须全部一致才能解绑  
+
+
+第二种  
+DOM0级
+
+Element.onclick = () => {}
+
+优点：兼容性好
+
+缺点：只能为一个元素的一个事件绑定一个监听函数，如果绑定多个，则后绑会覆盖先绑
+
+解绑：赋值null
+```
+		<button id="btn1">按钮1</button>
+		<button id="btn2">按钮2</button>
+		<button onclick="demo()">按钮3</button>
+
+		<script type="text/javascript" >
+			const btn1 = document.getElementById('btn1')
+			btn1.addEventListener('click',()=>{
+				alert('按钮1被点击了')
+			})
+
+			const btn2 = document.getElementById('btn2')
+			btn2.onclick = ()=>{
+				alert('按钮2被点击了')
+			}
+
+			function demo(){
+				alert('按钮3被点击了')
+			}
+
+		</script>
+```
+
+---------------------------------------
+
+# 类的this复习
+方法也是特殊的属性  
+先找到属性，赋值给变量的时候，是沿着原型链找到的类的方法，并不是通过实例调用的，而是相当于直接调用函数（方法）   
+非严格模式下指向window    
+严格模式下禁止指向window，所以是undefined   
+```
+			class Person {
+				// 构造器
+				constructor(name,age){
+					this.name = name
+					this.age = age
+				}
+				// 方法
+				study(){
+					//study方法放在了哪里？——类的原型对象上，供实例使用
+					//通过Person实例调用study时，study中的this就是Person实例
+					console.log(this);
+				}
+			}
+
+			const p1 = new Person('tom',18)
+			p1.study() //通过实例调用study方法
+			const x = p1.study
+			x()
+			// 这里是先赋值，直接调用，非严格模式下指向window，严格模式下就是undefined
+			// 类里面默认已经开启严格模式了
+			// 所以undefined
+```
+
+## 组件实例对象的三大属性
 
 ### state（状态）
 
@@ -314,95 +428,212 @@ state是组件对象最重要的属性，值是对象（可以包含多个数据
 组件被称为状态机，通过更新组件的state来更新对应的页面显示（重新渲染组件）
 
 ```
-<body>
-    <div id="test"></div>
-    <script src="../js/react.development.js"></script>
-    <script src="../js/react-dom.development.js"></script>
-    <script src="../js/babel.min.js"></script>
-    <script type="text/babel">
-    class Love extends React.Component {
-        constructor(props) {
-            super(props)
-            // 初始化状态
-            this.state = {
-                isLove: true
-            }
-            // 将新增方法强制绑定为组件对象
-            this.handleClick = this.handleClick.bind(this)
-        }
-        // 新增方法this默认不是组件对象，而是null
-        handleClick() {
-            // 得到状态并取反
-            const isLove = !this.state.isLove
-            // 更新状态
-            this.setState({isLove})
-        }
-        // 重写组件类方法
-        render() {
-            // 读取状态
-            const {isLove} = this.state
-            return <h1 onClick={this.handleClick}>{isLove?"我爱你":"我不爱你"}</h1>
-        }
-    }
-    ReactDOM.render(<Love/>, document.getElementById('test'))
-    </script>
-</body>
+	<script type="text/babel">
+		//1.创建组件
+		class Weather extends React.Component{
+			
+			//构造器调用几次？ ———— 1次
+			constructor(props){
+				console.log('constructor');
+				// 继承里面必须调用super()方法
+				super(props)
+				//初始化状态
+				this.state = {isHot:false,wind:'微风'}
+				//解决changeWeather中this指向问题（原来是undefined）
+
+				// ↓这个changeWeather指的是render返回里面点击事件绑定的
+				this.changeWeather = this.changeWeather.bind(this)
+				//                      ↑这个changeWether是原来类里面定义的方法
+				// 						通过原型链查找到，通过bind修改this，返回新函数
+			}
+
+			//render调用几次？ ———— 1+n次 1是初始化的那次 n是状态更新的次数
+			render(){
+				console.log('render');
+				//读取状态
+				const {isHot,wind} = this.state
+				// react绑定点击事件时使用的是onClick，C大写！！
+				// onClick = {}使用原生js表达，并且不能加()表示立即执行函数并赋值
+				return <h1 onClick={this.changeWeather}>今天天气很{isHot ? '炎热' : '凉爽'}，{wind}</h1>
+			}
+
+			//changeWeather调用几次？ ———— 点几次调几次
+			changeWeather(){
+				//changeWeather放在哪里？ ———— Weather的原型对象上，供实例使用
+				//由于changeWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
+				//类中的方法默认开启了局部的严格模式，所以changeWeather中的this为undefined
+				
+				console.log('changeWeather');
+				//获取原来的isHot值
+				const isHot = this.state.isHot
+				//严重注意：状态必须通过setState进行更新,且更新是一种合并，不是替换。
+				this.setState({isHot:!isHot,wind: '狂风！'})
+				console.log(this);
+
+				//严重注意：状态(state)不可直接更改，下面这行就是直接更改！！！
+				//this.state.isHot = !isHot //这是错误的写法
+				// 单纯数据更改react不认可
+			}
+		}
+		//2.渲染组件到页面
+		ReactDOM.render(<Weather/>,document.getElementById('test'))
+				
+	</script>
 ```
+  
+state的简化写法  
+```
+		//1.创建组件
+		class Weather extends React.Component{
+			//初始化状态 可以直接写在构造器外面
+			state = {isHot:false,wind:'微风'}
+
+			render(){
+				const {isHot,wind} = this.state
+				return <h1 onClick={this.changeWeather}>今天天气很{isHot ? '炎热' : '凉爽'}，{wind}</h1>
+			}
+
+			//自定义方法————要用赋值语句的形式+箭头函数
+			changeWeather = ()=>{
+				const isHot = this.state.isHot
+				this.setState({isHot:!isHot})
+			}
+		}
+		//2.渲染组件到页面
+		ReactDOM.render(<Weather/>,document.getElementById('test'))
+			
+```
+类中可以直接写赋值语句，不需要事先定义   
+类中自定义方法使用箭头函数，箭头函数没有自己的this，箭头函数里面的this使用的是外部的this，外部类中的this指的是实例对象 
+react渲染组件的时候自动new了实例对象
+
 
 ### props（标签属性）
 
-每个组件对象都会有props(properties)属性
-组件标签的所有属性都保存在props中
+每个组件对象都会有props(properties)属性  
+组件标签的所有属性都保存在props中  
 
-通过标签属性从组件外向组件内传递变化的数据
+通过标签属性从组件外向组件内传递变化的数据  
 注意：所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。
+基本使用
 
-```
-<body>
-    <div id="test"></div>
-    <script src="../js/react.development.js"></script>
-    <script src="../js/react-dom.development.js"></script>
-    <script src="../js/prop-types.js"></script>
-    <script src="../js/babel.min.js"></script>
-    <script type="text/babel">
-        // 定义组件类
-        class Person extends React.Component {
-            render() {
-                console.log(this)
-                return (
-                    <ul>
-                        <li>姓名：{this.props.name}</li>
-                        <li>性别：{this.props.sex}</li>
-                        <li>年龄：{this.props.age}</li>
-                    </ul>
-                )
-            }
-        }
-        // 对标签属性进行限制
-        Person.propTypes = {
-            name: PropTypes.string.isRequired,
-            sex: PropTypes.string,
-            age: PropTypes.number,
-        }
-        // 指定属性默认值
-        Person.defaultProps = {
-            name: 'JACK',
-            sex: '男',
-            age: 20
-        }
-        // 渲染组件标签
-        const person = {
-            name: 'Helen'
-        }
-        ReactDOM.render(<Person {...person}/>, document.getElementById('test'))
-    </script>
-</body>
+```		// 创建组件
+		class Person extends React.Component{
+	
+			render(){
+				const {name,age,sex } = this.props
+				console.log(this);
+				return(
+					<ul>
+						<li>姓名：{name}</li>	
+						<li>性别：{age}</li>	
+						<li>年纪：{sex}</li>	
+						
+					</ul>
+				)
+			}
+		}
+		// 渲染组件
+		ReactDOM.render(<Person name = 'tom' age = '18' sex = '男'/>,document.getElementById('test1'))
+		
+		// 批量传输数据时
+		const p = {name:'老刘',age:18,sex:'女'}
+		// ReactDOM.render(<Person name={p.name} age={p.age} sex={p.sex}/>,document.getElementById('test3'))
+		ReactDOM.render(<Person {...p}/>,document.getElementById('test3'))
 ```
 
+
+
+------------------------------------
+
+# 三点运算符复习
+对数组
+```
+			let arr1 = [1,3,5,7,9]
+			let arr2 = [2,4,6,8,10]
+			console.log(...arr1); //展开一个数组
+			let arr3 = [...arr1,...arr2]//连接数组
+```
+对函数
+```
+			// ...用于函数传参
+			// 求和函数
+			function sum(...nums){
+				return nums.reduce((preValue,currentValue) => {
+					return preValue + currentValue;
+				})
+			}
+			console.log('AAAA'+sum(...arr1));// 25
+```
+
+三点运算符不能应用到对象  
+但是可以使用{}/[]中的三点运算符实现第一层‘深拷贝’ 
+```
+
+			let person = {
+				name: 'tom',
+				age: 18
+			}
+			// 浅拷贝
+			let person2 = person;
+			// 深拷贝
+			let person3 = {...person}
+			person.name = 'jrj'
+			console.log(person2);
+			console.log(person3);
+
+
+			let arr666 = [1,2,3,[1,2,444],{name: '孙悟空'}]
+			// 浅拷贝
+			let arr777 = arr666;
+			// 深拷贝
+			// let arr888 = {...arr666}
+			let arr888 = [...arr666]
+			arr666[3] = 111
+			console.log('浅拷贝'+arr777[3]);
+			console.log(arr888[3]);
+		
+```
+第二层失效
+```
+			let arr666 = [1,2,3,[1,2,[666]],{name: '孙悟空'}]
+			// 浅拷贝
+			let arr777 = arr666;
+			// 深拷贝
+			// let arr888 = {...arr666}
+			let arr888 = [...arr666]
+			arr666[3][2] = 111
+			console.log('浅拷贝'+arr777[3][2]);
+			// 111
+			console.log(arr888[3][2]);
+			// 111
+```
+
+还可以使用三点运算符对对象进行合并
+
+----------------------------------
+#### 对props进行限制
+```
+		//对标签属性进行类型、必要性的限制
+		Person.propTypes = {
+			name:PropTypes.string.isRequired, //限制name必传，且为字符串
+			sex:PropTypes.string,//限制sex为字符串
+			age:PropTypes.number,//限制age为数值
+			speak:PropTypes.func,//限制speak为函数 必须是func，因为function是关键字
+		}
+```
+设置数据的默认值
+```
+		//指定默认标签属性值
+		Person.defaultProps = {
+			sex:'男',//sex默认值为男
+			age:18 //age默认值为18
+		}
+```
 ### state与props的区别
 
-state：组件自身内部可变化的数据
-props：从组件外部向组件内部传递数据，组件内部只读不修改
+state：组件自身`内部`可变化的数据   
+props：从组件`外部`向组件内部传递数据，组件内部只读不修改
 
 ### refs（元素标识）
 
