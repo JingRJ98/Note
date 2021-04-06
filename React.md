@@ -630,19 +630,69 @@ react渲染组件的时候自动new了实例对象
 			age:18 //age默认值为18
 		}
 ```
+
+### props简写
+```
+	<script type="text/babel">
+		//创建组件
+		class Person extends React.Component{
+
+			constructor(props){
+				//构造器是否接收props，是否传递给super，取决于：是否希望在构造器中通过this访问props
+				// console.log(props);
+				super(props)
+				console.log('constructor',this.props);
+			}
+
+			//对标签属性进行类型、必要性的限制
+			static propTypes = {
+				name:PropTypes.string.isRequired, //限制name必传，且为字符串
+				sex:PropTypes.string,//限制sex为字符串
+				age:PropTypes.number,//限制age为数值
+			}
+
+			//指定默认标签属性值
+			static defaultProps = {
+				sex:'男',//sex默认值为男
+				age:18 //age默认值为18
+			}
+			
+			render(){
+				// console.log(this);
+				const {name,age,sex} = this.props
+				//props是只读的
+				//this.props.name = 'jack' //此行代码会报错，因为props是只读的
+				return (
+					<ul>
+						<li>姓名：{name}</li>
+						<li>性别：{sex}</li>
+						<li>年龄：{age+1}</li>
+					</ul>
+				)
+			}
+		}
+
+		//渲染组件到页面
+		ReactDOM.render(<Person name="jerry"/>,document.getElementById('test1'))
+	</script>
+```
+类 的构造器中是否接收props,是否将props传递给super(),取决于是否希望在构造器中通过实例对象this访问props  
+接受了不传给super，可能出现未定义的bug    
+因此实际开发中基本不写构造器  
+
 ### state与props的区别
 
-state：组件自身`内部`可变化的数据   
-props：从组件`外部`向组件内部传递数据，组件内部只读不修改
+state：组件自身`内部`可变化的数据     
+props：从组件`外部`向组件内部传递数据，组件内部只读不修改   
 
 ### refs（元素标识）
 
-组件内的标签都可以定义ref属性来标识自己
+组件内的标签都可以定义ref属性来标识自己   
 
-`<input type='text' ref=(input => this.msginput = input)` 
-回调函数在组件初始化渲染完成或卸载时自动调用
-在组件中可以通过this.msginput来得到对应的真实DOM元素
-作用：通过ref获取组件内容特定标签对象，进行读取其相关数据
+`<input type='text' ref=(input => this.msginput = input)`   
+回调函数在组件初始化渲染完成或卸载时自动调用   
+在组件中可以通过this.msginput来得到对应的真实DOM元素   
+作用：通过ref获取组件内容特定标签对象，进行读取其相关数据     
 
 ```
 <body>
