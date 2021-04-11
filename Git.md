@@ -1,34 +1,48 @@
 # Git
-
-分布式的版本控制系统  
-
+分布式的版本控制系统
 
 (集中式的版本控制系统)SVN  
 代码保存在同一服务器 便于管理  
 集中式版本控制系统有可能服务器宕机丢失所有历史记录  
-SVN保存的是差异，所需空间小 但是回溯麻烦
+SVN保存的是差异，所需空间小 但是回溯麻烦  
 
-客户端不只是提取最新版本的文件快照，而是把代码仓库完整地镜像下来，每一次的提取操作，实际上都是一次对代码仓库的完整备份 
-压缩算法比较好  
+客户端不只是提取最新版本的文件快照，而是把代码仓库完整地镜像下来，每一次的提取操作，实际上都是一次对代码仓库的完整备份 压缩算法比较好  
+
 去中心化  
 特点：  
 1.直接记录快照，而非差异比较  
 2.近乎所有操作都是本地执行  
-3.时刻保持数据的完整性   
-4.多数操作仅添加数据   
+3.时刻保持数据的完整性  
+4.多数操作仅添加数据  
 5.文件的三种状态  
 
-# 初始化配置
-
+# 初始化
 检查已有配置
 
 git config --list
 
 配用户名与邮箱
 
-git config --global user.name "RJ"
+git config --global user.name "Isaac"
 
 git config --global user.email 239611376@qq.com
+
+# 区域
+工作区 
+沙盒 一般不保存 可以修改
+
+
+暂存区
+保存 
+版本库
+最终
+
+# 对象
+Git对象
+
+树对象
+
+提交对象
 
 # 初始化新仓库
 
@@ -65,9 +79,37 @@ git init
 ## index！
 文件保存暂存区信息
 
+# 常见linux命令
+clear 清除屏幕
+
+echo 打印信息
+echo 'test content' > text.txt  创建一个txt文件
+
+ll 将当前目录下的子目录子文件平铺在控制台
+
+find 将对应目录下的子孙文件 子孙目录显示平铺在控制台
+
+find -type f 将对应文件下的子孙文件显示在控制台
+
+rm 删除文件
+
+mv 重命名
+
+cat url 查看地址对应的 文件内容
+
+vim url 
+按i进入编辑模式
+按esc键 进入命令的执行
+
+q! 强制退出
+
+wq 保存退出
+
+set nu 设置行号
+ 
 # Git对象（文件快照）
 
-key-value组成的键值对，
+key-value组成的键值对  
 key是value的hash
 键值对在GIt内部是一个blob类型
 
@@ -79,6 +121,10 @@ key是value的hash
 `echo "version 1" > test.txt`
 `git hash-object -w test.txt`
 
+两个命令可以使用`|`隔开
+
+git hash-object -w fileURL 
+生成一个key(hash值)：val(压缩后的文件内存)存到.git/objects
 ### 向文件中写入新的内容，并将其存入数据库
 
 `echo "version 2" > test.txt`
@@ -87,7 +133,10 @@ key是value的hash
 ### 查看数据库内容
 
 `git cat-file -p hash`
+拿对应的对象的内容
 
+`git cat-file -t hash`
+拿对应的对象的类型
 ## Git对象的存储是工作区与版本库的交互
 
 # 树对象（项目快照）
@@ -98,8 +147,9 @@ key是value的hash
 
 首次加入--add
 `git update-index --add --cacheinfo 100644 hash test.txt`
+ 向暂存区添加一条记录 让Git对象 对应上文件名
 
-## 查看暂存区
+## 查看暂存区！
 
 `git ls-files -s`
 
@@ -118,10 +168,15 @@ key是value的hash
 # 提交对象（对树对象进行封装进行解释补充）
 
 `echo "first commit" | git commit-tree 树对象hash`
+生成一个提交对象存到.git/objects
 
-![](_v_images/20200427210205951_31592.png =773x)
 
 # 高层命令（CRUD）
+版本库是增量的 暂存区是覆盖的
+git操作最基本的流程
+1、创建工作目录 对工作目录进行修改
+2、git add命令 ./
+3、git commit -m "注释内容"
 
 ## Git操作最基本的流程
 
@@ -143,9 +198,9 @@ key是value的hash
 
 ## git add 路径
 
-将文件转为Git对象存入数据库再引入暂存区
+将文件转为Git对象存入数据（版本）库再引入暂存区
 
-## git commit (-m "注释")
+## git commit -m "注释"
 
 创建树对象以及提交对象存入数据库
 
@@ -166,7 +221,7 @@ git diff
 git diff --cached
 当前哪些文件已暂存还未提交
 
-## git log (--oneline)
+## git log --oneline
 
 查看历史提交记录
 
@@ -179,14 +234,18 @@ git diff --cached
 将工作区对应文件重命名且将修改存入暂存区
 
 # 高层命令（分支）
-
 分支的本质就是一个提交对象
-HEAD是一个指针，默认指向master分支 切换分支其实就是切换HEAD指向
+HEAD是一个指针，默认指向master分支 切换分支其实就是切换
+
+HEAD指向
 每当有新的提交时，HEAD带着分支一起向前
 
 ## git branch 
 
-显示分支列表
+查看分支列表
+
+## git branch name
+在当前提交对象上创建新的分支
 
 ## git branch 分支名 commithash
 
@@ -198,7 +257,7 @@ HEAD是一个指针，默认指向master分支 切换分支其实就是切换HEA
 
 ## git checkout -b 分支名
 
-创建并切换分支（当前commit对象）
+切换分支（当前commit对象）
 
 ## git branch -D 分支名
 
@@ -211,7 +270,10 @@ HEAD是一个指针，默认指向master分支 切换分支其实就是切换HEA
 ## 切换分支的一些问题
 
 1.切换分支时，如果当前分支有首次未暂存的修改或首次未提交的暂存，分支可以切换成功，但是会污染其他分支
+    就是切分支的时候注意一下有没有保存 
+    没有保存也可以切成功  但是会污染别的分支
 
+    
 2.切换分支改变三个位置：HEAD 暂存区 工作区
 
 ## git merge 分支名
@@ -219,6 +281,34 @@ HEAD是一个指针，默认指向master分支 切换分支其实就是切换HEA
 快进合并（同一主线上）
 
 典型合并（不同主线）
+
+# Git实例
+```js
+git init 创建仓库
+echo "a.txt v1" > a.txt  写文件
+git status 检查状态（此时未跟踪）
+git add a.txt 跟踪这个文件
+git status 已经跟踪
+git commit -m "1 commit for a.txt"  
+提交 -m后添加提交的注释 请一定注意暂存区是否存在没有git add
+vim a.txt 进入编辑a.txt
+    按i进入编辑模式
+    esc + : +wq保存退出
+
+git checkout -b test 新建一个分支并切换过去
+git checkout master 切换分支 （会删除b.txt 同时清除暂存区）
+
+```
+当遇到突发问题时，先给手头的添加跟踪并提交
+git add./ 
+git commit -m " 注释"
+
+回到主分支 master
+git checkout master
+创建一个新的分支用于解决突发情况（hotbug）
+git checkout -b "bug1"
+提交后，回到原来的工作继续
+
 
 # Git存储
 
