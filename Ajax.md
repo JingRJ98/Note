@@ -1,441 +1,375 @@
+# 传统网站做的不好的地方
++ 网速慢的情况下，加载缓慢，用户只能等待
+
++ 表单提交后，如果填写的内容有一项不合格，用户只能重新填写所有的内容
+
++ 页面跳转，重新加载页面，造成资源浪费，增加用户等待的时间
+
 # Ajax
+是浏览器提供的一套方法，可以实现页面`无刷新`更新数据的情况下，向服务端`发送HTTP请求并返回结果`，提高用户浏览网站应用的体验
 
-## 传统网站存在的问题
+## 优点
+无刷新页面与服务器进行通信
 
-传统网站中页面加载时间长，网速慢的情况下，用户只能等待    
-提交表单中，假如用户有一项不满足要求，则必须重新填写所有表单内容  
-传统网站页面跳转时，重新加载页面，造成资源浪费，增加用户等待时间  
 
-ajax实现不用刷新整个页面便可与服务器通信的技术，用于局部更新数据  
-# Ajax应用场景
-1、页面上拉加载更多数据  
-2、列表数据刷新分页  
-3、表单项离开焦点数据验证  
-4、搜索框文字下拉提示  
+允许根据用户事件部分来更新部分页面内容
 
-# Ajax实现步骤
 
-1.创建Ajax对象
+## 缺点
+没有浏览历史，无法回退
 
-`let xhr = new XMLHttpRequest()`
+存在跨域问题
 
-2.定义请求地址以及请求方式
+SEO不友好
+搜索引擎优化 
 
-`xhr.open('get', 'http://127.0.0.1:3000')`
+## 应用场景
++ 页面上拉加载
++ 列表数据无刷新分页
++ 表单项离开焦点数据验证
++ 搜索框下拉文字提示
 
-3.发送请求
+# 运行环境
+需要借助Node开启网站服务器
 
-`xhr.send()`
+# XML可扩展的标记语言
+被设计用来传输和存储数据
 
-4.获取服务器端的响应数据
+XML中没有预定义的标签，全部是自定义标签
 
-`xhr.onload = () => { console.log(xhr.resposeText) }`
+# 例子(GET请求)
+点击按钮发送请求
+将返回的结果呈现在一个div里面
 
-# 服务器响应的数据格式
+*配置服务器*
+端口号8000`127.0.0.1:8000/server`
+```js
+// 1、引入express框架
+const express = require('express');
 
-字符串与二进制
+// 2、创建应用app
+const app = express();
 
-# 请求参数传递
+// 3、创建路由规则
+app.get('/server',(request,response) => {
+    // 设置响应头  设置允许跨域
+    response.setHeader('Access-Control-Allow-Origin','*');
+    // 设置响应
+    response.send(':) 这是我的服务器');
 
-GET请求方式
+});
 
-`xhr.open('get', 'http://127.0.0.1/?name=zhangsan&age=20')`
 
-POST请求方式
-
-设置请求报文首部
-`xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')`
-在send中传参
-`xhr.send('name=zhangsan&age=20')`
-
-# 请求参数格式
-
-1.application/x-www-form-urlencoded
-
-`'name=zhangsan&age=20'`
-
-2.application/json
-
-`'{"name": "zhangsan", "age": 20}'`
-
-# Ajax状态码
-
-0：请求未初始化，未调用open
-1：请求已经建立，还未发送，未调用send
-2：请求已经发送
-3：请求正在处理中，通常响应中已经有部分数据可以使用了
-4：请求已经完成，可以获取并使用服务器响应数据
-
-## 获取Ajax状态码
-
-xhr.readyState
-
-onreadystatechange
-当Ajax状态码发生改变时触发该事件
-
-# 获取服务器响应的区别
-
-onload事件不兼容IE低版本，只触发一次，无需判断Ajax状态码
-onreadystatechange事件兼容IE低版本，触发多次，需要判断Ajax状态码
-
-# 获取响应状态码
-
-xhr.status
-
-# 获取响应报文首部
-
-xhr.getResponseHeader()
-
-获取响应报文数据类型
-
-xhr.getResponseHeader('Content-Type')
-
-# 低版本IE浏览器优先从缓存加载问题
-
-在请求地址不发生改变的情况下，只有第一次请求会发送到服务端
-后续请求会从浏览器缓存中获取结果
-同时低版本IE也不支持onload事件
-
-解决方案：
-
-`xhr.open('get', `http://127.0.0.1:3000/?t=${Math.random()}`)`
-
-# 客户端使用art-template
-
-1.下载template并引入
-
-`<script src="./js/template-web.js"></script>`
-
-2.创建一个art-template模板
-
-```
-<h1 id='container'>hello world</h1>
-<script id="tp1" type="text/html">
-    {{ name }} {{ age }}
-</script>
+// 4、监听端口
+app.listen(8000,() =>{
+    console.log('服务器启动啦~~');
+});
 ```
 
-3.模板数据赋值获得html字符串
 
-`const html = template('tpl', {name: '张三', age: 20})`
-
-4.将处理好的html字符串添加到页面中
-
-` document.getElementById('container').innerHTML = html`
-
-# 节流函数
-
-```
-let timer = null
-clearTimeout(timer)
-timer = setTimeout(() => {}, 500)
-```
-
-# FormData对象
-
-## FormData对象的作用
-
-### 1.将HTML表单映射成表单对象
-
-客户端
-
-```
-    <form id='form'>
-        <input type="text" name="username">
-        <input type="password" name="password">
-        <input type="button" value="提交" id='btn'>
-    </form>
-
-    <script>
-        const btn = document.getElementById('btn')
-        btn.onclick = () => {
-            const form = document.getElementById('form')
-            const formData = new FormData(form)
-            const xhr = new XMLHttpRequest()
-            xhr.open('post', 'http://127.0.0.1:3000/post')
-            xhr.send(formData)
-            xhr.onload = () => {
-                console.log(xhr.responseText)
-            }
+*写网页*
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax GET 请求</title>
+    <style>
+        #result{
+            width: 200px;
+            height: 100px;
+            border: solid 1px red;
         }
-    </script>
-```
-
-服务端
-
-npm i formidable
-```
-const formidable = require('formidable')
-app.post('/post', (req, res) => {
-    const form = new formidable.IncomingForm()
-    form.parse(req, (err, fields, files) => {
-        res.send(fields)
-    })
-})
-```
-
-### 2.异步上传二进制文件
-
-客户端
-
-```
-    <label for="file">请选择文件</label>
-    <input type="file" id="file" name='file'>
-    <script>
-        const file = document.getElementById('file')       
-        file.onchange = () => {
-            const formData = new FormData()  
-            formData.append('attrName', file.files[0])
-            const xhr = new XMLHttpRequest()
-            xhr.open('post', 'http://127.0.0.1:3000/post')
-            xhr.send(formData)
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    console.log(xhr.responseText)
-                }
-            }
-        }
-    </script>
-```
-
-服务端
-
-```
-app.post('/post', (req, res) => {
-    const form = new formidable.IncomingForm()
-    form.uploadDir = './public/uploads'
-    form.keepExtensions = true
-    form.parse(req, (err, fields, files) => {
-        res.send('OK')
-    })
-})
-```
-
-上传文件进度
-
-```
-xhr.upload.onprogress = ev => {
-    ev.loaded / ev.total
-}
-```
-获取上传资源图片地址
-
-```
-app.post('/post', (req, res) => {
-    const form = new formidable.IncomingForm()
-    form.uploadDir = './public/uploads'
-    form.keepExtensions = true
-    form.parse(req, (err, fields, files) => {
-        res.send({
-            path: '/public' + files.attrName.path.split('public')[1]
-        })
-    })
-})
-```
-
-## FormData对象实例方法
-
-### get('key')
-
-获取表单对象的属性值
-
-### set('key', value)
-
-设置表单对象的属性值
-set会覆盖相同属性名
-
-### delete('key')
-
-删除表单属性值
-
-### append('key', value)
-
-添加表单对象属性
-append不会覆盖相同属性名，保留两个
-
-# AJAX请求限制
-
-## 同源政策
-
-同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据。
-
-三个相同：
-1.协议相同
-2.域名相同
-3.端口相同
-
-限制范围
-1.无法读取非同源网页的Cookie，LocalStorage, IndexedDB
-2.无法接触非同源网页的DOM
-3.无法向非同源地址发送Ajax请求，（可以发送，但浏览器会拒绝接受响应）
-
-# JSONP解决跨域问题
-
-JSONP是json with padding的缩写
-它不属于Ajax请求，但它可以模拟Ajax请求
-利用script标签可以向非同源地址发送请求
-
-1.在客户端全局作用域下定义函数fn
-
-`function fn (data) {}`
-
-2.在fn函数内部对服务器端返回的数据进行处理
-
-`function fn (data) {console.log(data)}`
-
-3.将不同源的服务器请求地址写在script标签的src属性中
-
-`<script src="http://127.0.0.1:3001/get?callback=fn"></script>`
-
-
-4.服务器端响应数据必须是一个函数的调用，真正要发送给客户端的数据需要作为函数调用的参数
-
-```
-const data = req.query.callback + '({name: '张三',age: 18})'
-res.send(data)
-```
-
-## JSONP封装
-
-客户端
-
-```
+    </style>
+</head>
 <body>
-    <button id="btn">点我</button>
+    <!-- 
+        点按钮发请求
+        将响应的内容在#result这个div中呈现
+    -->
+    <button>点击发送请求</button>
+    <div id="result"></div>
+
     <script>
-        const btn = document.getElementById('btn')
-        btn.onclick = () => {
-            jsonp({
-                url: 'http://127.0.0.1:3001/jsonp',
-                data: {
-                    name: '张三',
-                    age: 20
-                },
-                success(data) {
-                    console.log(data)
-                }
-            })
-        }
-        function jsonp(options) {
-            const fnName = 'jsonp' + Math.random().toString().replace('.', '')
-            window[fnName] = options.success
+        // 获取btn
+        const btn = document.getElementsByTagName('button')[0];
+        // 获取div
+        const res = document.getElementById('result');
+        // 绑定一个事件
+        btn.onclick = function(){
+            // 测试交互
+            // console.log('test');
 
-            let param = ''
-            for (const key in options.data) {
-                if (options.data.hasOwnProperty(key)) {
-                    param += `&${key}=${options.data[key]}`
-                }
-            }
+            // 1、创建对象
+            const xhr = new XMLHttpRequest();
+            // 2、初始化，设置请求方法和url
+            xhr.open('GET','http://127.0.0.1:8000/server');
+            // 3、发送
+            xhr.send();
+            // 4、事件绑定，处理服务端返回的结果
+            // on当什么时候
+            // readystate 是xhr对象中的属性 0 1 2 3 4
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    // 服务端返回了所有的结果
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        //返回成功 2xx
+                        // 处理结果 行 头 空行 体
+                        console.log(xhr.status);// 状态码
+                        console.log(xhr.statusText);// 状态字符串
+                        console.log(xhr.getAllResponseHeaders());// 所有响应头
+                        console.log(xhr.response);// 响应体
 
-            const scriptNode = document.createElement('script')
-            scriptNode.src = `${options.url}?callback=${fnName}${param}`
-            document.body.appendChild(scriptNode)
-            scriptNode.onload = () => {
-                document.body.removeChild(scriptNode)
+                        // 把响应体在div中显示
+                        res.innerHTML = xhr.response;
+                    }
+                }
             }
         }
     </script>
 </body>
+ </html>
 ```
 
-服务端
 
+实现不刷新页面向服务器发送请求，获取服务器的响应内容
+
+
+
+
+
+## 设置ajax URL参数
+在端口号/server后面加上`?a=100&b=200`
+
+在查询字符串中显示a = 100   b = 200
+
+
+# POST请求
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST</title>
+    <style>
+        #result {
+            width: 200px;
+            height: 100px;
+            border: solid 1px red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="result"></div>
+    <script>
+        // 获取元素对象
+        const res = document.getElementById('result');
+        // 绑定事件
+        res.addEventListener('click', function () {
+            // 1、创建对象
+            const xhr = new XMLHttpRequest();
+            // 2、初始化，设置请求类型（POST）与URL
+            xhr.open('POST', 'http://127.0.0.1:8000/server?jrj=666');
+            // 3、发送(可以设置参数为请求负载)
+            xhr.send('a=678&b=200');
+            // 4、事件绑定
+            xhr.onreadystatechange = function () {
+                if(xhr.readyState === 4){
+                    // 判断readystate状态，有0 1 2 3 4 五种
+                    // 4表示响应已经全部发送过来
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        // 判断状态码 2xx表示成功
+                        res.innerHTML = xhr.response
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
 ```
-app.get('/jsonp', (req, res) => {
-    // const fnName = req.query.callback   
-    // const data = JSON.stringify(req.query)
-    // console.log(data);
-    // res.send(`${fnName}(${data})`)
-    res.jsonp(req.query)
-})
-```
 
-# CROS跨域资源共享
 
-CROS全称：cross-origin resource sharing
-它允许浏览器向跨域服务器发送Ajax请求，客服了Ajax只能同源使用的限制
+# 设置请求头
+请求头必须在open之后send之前
+`xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')`
 
-跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）。
+可以自定义请求头
+例如`xhr.setRequestHeader('namehahaha','jrj')`
+但是浏览器会报错，因为自定义的请求头触发了安全机制
+可以在配置服务器中创建路由规则里面添加
+`response.setHeader('Access-Control-Allow-Headers','*');`
+同时把路由规则的请求改成`all`
+app.all()
 
-![](_v_images/20200424135053073_23492.png =797x)
 
-服务端
 
-```
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Methods', '*')
-    next()
-})
-```
+# 服务端响应json数据
+设置响应的时候需要转化为字符串形式
+```js
+// 3、创建路由规则
+app.all('/json-server',(request,response) => {
+    // 设置响应头  设置允许跨域
+    response.setHeader('Access-Control-Allow-Origin','*');
+    // 设置一个数据
+    const data = {
+        name:'isaac',
+        age:22
+    }
+    // 因为响应必需是一个字符串
+    // 所以必须对data进行转换
+    let str = JSON.stringify(data);
+    // 设置响应
+    response.send(str);
 
-# 服务器端解决跨域问题
-
-服务器端不存在同源政策限制
-
-![](_v_images/20200424143301343_16747.png =688x)
-
-npm i request
-
-```
-const request = require('request');
-request('http://www.google.com', function (error, response, body) {
-  console.error('error:', error); // Print the error if one occurred
-  console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-  console.log('body:', body); // Print the HTML for the Google homepage.
 });
 ```
 
-# 携带Cookie跨域登录
-
-在使用Ajax技术发送跨域请求时，默认情况下不会在请求中携带cookie信息
-
-## withCredentials = true
-
-指定在涉及跨域请求时，是否携带cookie信息，默认值为false
-
-## Access-Control-Allow-Credentials : true
-
-允许客户端发送请求时携带cookie
-
-# $.ajax()
-
-```
-$.ajax({
-    type: 'get',
-    url: 'http://www.example.com',
-    data: {name: '张三', age: 20},
-    contentType: 'application/x-www-form-urlencoded',
-    beforeSend() {},
-    success(response){},
-    error(xhr){}
-})
+然后在客户端手动对数据进行转化
+手动`let data = JSON.parse(xhr.response);`
+```js
+            // 4、绑定函数处理响应
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    // 判断状态4表示响应全部发送完毕
+                    if(xhr.status >= 200 && xhr.status < 300){
+                        // 判断状态码 2xx表示成功
+                        let data = JSON.parse(xhr.response);
+                        res.innerHTML = data.name;
+                        console.log(data);
+                    }
+                }
+            }
 ```
 
-## serialize方法
+也可以使用自动转换格式
+`xhr.responseType = 'json'`可以将响应内容直接转换成json格式
 
-将表单中的数据自动拼接成字符串类型参数
 
-`const param = $('form').serialize()`
+# IE缓存
+IE浏览器会对Ajax请求的响应结果进行缓存
+下一次再次请求的时候，IE浏览器上使用的是本地缓存而非想服务器请求的响应
 
-## $.ajax()发送jsonp
+## 解决
+设置请求类型和URL的时候
+`xhr.open('GET','http://127.0.0.1:8000/ie?t'+Date.now());`
+由于给URL添加了唯一的时间戳
+IE浏览器会认为不同的点击发送的不同的请求
+从而不断的向服务器发送请求而非使用IE本地缓存
 
+
+
+# 请求超时与网络异常处理
+
+在响应中设置一个延时函数
+```js
+    setTimeout(() => {
+        // 设置响应
+        response.send(':)这是延时响应');
+    }, 3000)
 ```
-$.ajax({
-    url: 'http://www.example.com',
-    dataType: 'jsonp',
-    // jsonp: 'callback',
-    // jsonCallback: 'fnName',
-    success(response) {
-    }
-})
+
+客户端可以设置超时
+```js
+            // 超时设置
+            // 两秒钟之内还没有结果就取消请求
+            xhr.timeout = 2000;  
+```
+甚至可以设置一个回调函数来处理超时的结果（联网但是收不到响应的时候）
+```js
+            // 超时回调,处理超时结果
+            xhr.ontimeout = () => {
+                alert('你的网络有点异常，请稍后重试TT');
+            }
 ```
 
-# $.get(), $.post()
+甚至还可以设置网络异常的回调(没联网的情况下)
+```js
+            // 网络异常的回调
+            xhr.onerror = () => {
+                alert('你没联网~')
+            }
+```
 
-`$.get('www.example.com', {name:'张三'}, (res) => {})`
 
-# jQuery中Ajax全局事件
+# 取消请求
+对创建的xhr对象使用abort()方法可以取消发送的请求
 
-ajaxStart
-ajaxComplete
+# 重复发送请求的问题
+设置变量表示是否正在发送请求
+默认false不发送
+从创建对象开始修改为true,表示正在发送请求
+
+当接收状态为4时请求停止
+
+在发送请求的时候判断是否正在发送请求
+若是
+则使用abort()方法取消请求并发起新的请求
+
+
+# fetch函数发送ajax请求
+fetch接收两个参数
+第一个参数是服务器URL
+第二个参数是一个对象
+对象中包含请求方法、请求头和请求体信息
+
+
+# 同源
+是一种安全策略
+
+同源：协议、域名、端口号必须完全相同
+
+违背同源政策就是跨域
+
+单台服务器的性能是有上限的，所以需要多台服务器协同工作
+
+
+Ajax发送请求的时候是默认满足同源策略的
+
+
+# 解决跨域
+## jsonp
++ jsonp是什么？
+  非官方的跨域方案，只支持get请求
++ jsonp是如何工作的
+页面中的一些标签天生具有跨域功能 比如 script img link iframe
+例子
+当选择使用file协议和http协议打开时app.js
+<script src="./js/app.js"></script>
+没有问题
+
+<!-- <script src="./js/app.js"></script> -->
+<script src="http://127.0.0.1:5500/%E8%B7%A8%E5%9F%9F/jsonp/js/app.js"></script>
+将app.js的http协议URL在script标签中用本地file协议打开
+`open in browser`
+发现自动实现跨域
+
+
++ jsonp的使用
+  1、动态创建script标签
+    `var script = document.createElement('script');`
+  2、设置script的src,设置回调函数
+  3、将script标签插入到文档中
+
+## CORS
+cross origin resource sharing
+跨域资源共享
+是官方的跨域解决方案
+不需要再客户端进行操作。。完全在服务端操作
+
+支持get和post请求
+
+跨域资源共享标准新增了一组HTTP首部字段，允许服务器声明那些源站通过浏览器有权限访问那些资源
+
++ CORS怎么工作的
+  CORS通过设置特定的响应头告诉浏览器，该请求允许跨域，浏览器收到响应之后就会对响应放行
++ 使用
+  主要是在服务器端设置响应头
+  `response.setHeader("Access-Control-Allow-Origin","*")`
